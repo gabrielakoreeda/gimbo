@@ -3,12 +3,24 @@ let PDFJS = require("pdfjs-dist/legacy/build/pdf.js");
 
 const folder = "./notas/";
 
+const formatField = (operation, fieldName, str) => {
+  operation[fieldName] = (
+    operation[fieldName]
+      ? operation[fieldName] + str
+      : str.replace(/\s{1,}/g, " ")
+  ).trim();
+  return operation;
+};
+
 const converPDFToObject = async (filename, nota) => {
   const pdf = await PDFJS.getDocument(filename).promise;
   const pages = await pdf.numPages;
-  for (let i = 1; i <= pages; i++) {
+  for (let i = 2; i <= pages; i++) {
     let dataIndex;
     let tableIndex;
+    let tableHeader = {};
+    let tablePrev;
+    let tableHeaderEndIndex;
     let tableEnd = false;
     let data = "";
     let corretora = "";
@@ -19,59 +31,92 @@ const converPDFToObject = async (filename, nota) => {
       if (item.str === "Data pregão") dataIndex = index;
       if (index === dataIndex + 2) data = item.str;
       if (index === dataIndex + 4) corretora = item.str;
-      if (item.str === "D/C") tableIndex = index + 2;
-      if (item.str === "NOTA DE NEGOCIAÇÃO") tableEnd = true;
-      if (index >= tableIndex && !tableEnd) {
-        if (Object.keys(operation).length === 7) {
+      if (item.str === "Negócios realizados") tableIndex = index + 2;
+      if (item.str === "D/C") tableHeaderEndIndex = index;
+      if (
+        index >= tableIndex &&
+        (!tableHeaderEndIndex || index <= tableHeaderEndIndex)
+      ) {
+        if ((index - tableIndex) % 2 === 0) {
+          tableHeader[item.str] = { start: item.transform[4] };
+          tablePrev = item.str;
+          if (index === tableHeaderEndIndex)
+            tableHeader[tablePrev].end = item.transform[4] + item.width;
+        } else if (index !== tableHeaderEndIndex) {
+          tableHeader[tablePrev].end = item.transform[4];
+        }
+      }
+      if (index > tableHeaderEndIndex && !tableEnd) {
+        if (Object.keys(operation).includes("D/C")) {
           operations.push(operation);
           operation = {};
         }
-        if (index - tableIndex === 0 || (index - tableIndex) % 16 === 0) {
-          operation["Negociação"] = item.str;
-        }
-
         if (
-          index - tableIndex !== 0 &&
-          (index - tableIndex === 2 || (index - tableIndex) % 18 === 0)
+          item.transform[4] >= tableHeader["Q"].start &&
+          item.transform[4] <= tableHeader["Q"].end
         ) {
-          operation["C/V"] = item.str;
-        }
-
-        if (
-          index - tableIndex !== 0 &&
-          (index - tableIndex === 4 || (index - tableIndex) % 20 === 0)
+          operation = formatField(operation, "Q", item.str);
+        } else if (
+          item.transform[4] >= tableHeader["Negociação"].start &&
+          item.transform[4] <= tableHeader["Negociação"].end
         ) {
-          operation["Tipo mercado"] = item.str;
-        }
-
-        if (
-          index - tableIndex !== 0 &&
-          (index - tableIndex === 6 || (index - tableIndex) % 22 === 0)
+          operation = formatField(operation, "Negociação", item.str);
+        } else if (
+          item.transform[4] >= tableHeader["C/V"].start &&
+          item.transform[4] <= tableHeader["C/V"].end
         ) {
-          operation["Especificação do título"] = item.str;
-        }
-
-        if (
-          index - tableIndex !== 0 &&
-          (index - tableIndex === 8 || (index - tableIndex) % 26 === 0)
+          operation = formatField(operation, "C/V", item.str);
+        } else if (
+          item.transform[4] >= tableHeader["Tipo mercado"].start &&
+          item.transform[4] <= tableHeader["Tipo mercado"].end
         ) {
-          operation["Quantidade"] = item.str;
-        }
-
-        if (
-          index - tableIndex !== 0 &&
-          (index - tableIndex === 12 || (index - tableIndex) % 28 === 0)
+          operation = formatField(operation, "Tipo mercado", item.str);
+        } else if (
+          item.transform[4] >= tableHeader["Prazo"].start &&
+          item.transform[4] <= tableHeader["Prazo"].end
         ) {
-          operation["Preço / Ajuste"] = item.str;
-        }
-
-        if (
-          index - tableIndex !== 0 &&
-          (index - tableIndex === 10 || (index - tableIndex) % 30 === 0)
+          operation = formatField(operation, "Prazo", item.str);
+        } else if (
+          item.transform[4] >= tableHeader["Especificação do título"].start &&
+          item.transform[4] <= tableHeader["Especificação do título"].end
         ) {
-          operation["Valor Operação / Ajuste"] = item.str;
+          operation = formatField(
+            operation,
+            "Especificação do título",
+            item.str
+          );
+        } else if (
+          item.transform[4] >= tableHeader["Obs. (*)"].start &&
+          item.transform[4] <= tableHeader["Obs. (*)"].end
+        ) {
+          operation = formatField(operation, "Obs. (*)", item.str);
+        } else if (
+          item.transform[4] >= tableHeader["Quantidade"].start &&
+          item.transform[4] <= tableHeader["Quantidade"].end
+        ) {
+          operation = formatField(operation, "Quantidade", item.str);
+        } else if (
+          item.transform[4] >= tableHeader["Preço / Ajuste"].start &&
+          item.transform[4] <= tableHeader["Preço / Ajuste"].end
+        ) {
+          operation = formatField(operation, "Preço / Ajuste", item.str);
+        } else if (
+          item.transform[4] >= tableHeader["Valor Operação / Ajuste"].start &&
+          item.transform[4] <= tableHeader["Valor Operação / Ajuste"].end
+        ) {
+          operation = formatField(
+            operation,
+            "Valor Operação / Ajuste",
+            item.str
+          );
+        } else if (
+          item.transform[4] >= tableHeader["D/C"].start &&
+          item.transform[4] <= tableHeader["D/C"].end
+        ) {
+          operation = formatField(operation, "D/C", item.str);
         }
       }
+      if (item.str === "NOTA DE NEGOCIAÇÃO") tableEnd = true;
     });
     if (nota.hasOwnProperty(data)) {
       nota[data] = [
