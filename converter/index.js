@@ -80,7 +80,8 @@ const converPDFToObject = async (filename, nota) => {
         nota[data][corretora] = operations;
       }
     } else {
-      nota[data] = { corretora: operations };
+      nota[data] = {};
+      nota[data][corretora] = operations;
     }
   }
   return nota;
