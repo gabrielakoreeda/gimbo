@@ -12,7 +12,7 @@ const formatField = (operation, fieldName, str) => {
   return operation;
 };
 
-const converPDFToObject = async (filename, nota) => {
+const converPDFToObject = async (filename, notas) => {
   const pdf = await PDFJS.getDocument(filename).promise;
   const pages = await pdf.numPages;
   for (let i = 2; i <= pages; i++) {
@@ -118,28 +118,19 @@ const converPDFToObject = async (filename, nota) => {
       }
       if (item.str === "NOTA DE NEGOCIAÇÃO") tableEnd = true;
     });
-    if (nota.hasOwnProperty(data)) {
-      nota[data] = [
-        ...nota[data],
-        operations.map((op) => {
-          return { ...op, corretora };
-        }),
-      ];
-    } else {
-      nota[data] = operations.map((op) => {
-        return { ...op, corretora };
-      });
-    }
+    const nota = operations.map((op) => {
+      return { ...op, Corretora: corretora, "Data pregão": data };
+    });
+    notas.push(...nota);
   }
-  return nota;
 };
 
 const getAllNotas = async () => {
-  let notas = {};
+  let notas = [];
   fs.readdir(folder, async (err, files) => {
     for await (let file of files) {
       if (file.match(/\.pdf$/)) {
-        notas = await converPDFToObject(`${folder}/${file}`, notas).catch((e) =>
+        await converPDFToObject(`${folder}/${file}`, notas).catch((e) =>
           console.log(e)
         );
       }
@@ -156,4 +147,5 @@ const getAllNotas = async () => {
   });
 };
 
-export default getAllNotas;
+// export default getAllNotas;
+getAllNotas();
