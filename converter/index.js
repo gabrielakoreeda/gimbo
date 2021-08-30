@@ -93,17 +93,21 @@ const getAllNotas = async () => {
   let notas = {};
   fs.readdir(folder, async (err, files) => {
     for await (let file of files) {
-      if (file.match(/\.pdf^/)) {
+      if (file.match(/\.pdf$/)) {
         notas = await converPDFToObject(`${folder}/${file}`, notas).catch((e) =>
           console.log(e)
         );
       }
     }
-    fs.writeFile(`${folder}/notas.json`, JSON.stringify(notas), function (err) {
-      if (err) {
-        return console.log(err);
+    fs.writeFileSync(
+      `${folder}/notas.json`,
+      JSON.stringify(notas),
+      function (err) {
+        if (err) {
+          return console.log(err);
+        }
       }
-    });
+    );
   });
 };
 
