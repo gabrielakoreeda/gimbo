@@ -1,5 +1,5 @@
 let fs = require("fs");
-const filename = "./notas/notas.jso";
+const filename = "./notas/notas.json";
 
 export default function handler(req, res) {
   try {
