@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, createContext, useCallback } from "react";
 
-const NotasContext = React.createContext({
+const NotasContext = createContext({
   notas: [],
   reloadNotas: () => {},
 });
