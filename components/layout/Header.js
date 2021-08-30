@@ -7,7 +7,7 @@ const Header = () => {
   const notasCtx = useContext(NotasContext);
 
   const refreshNotasHandler = () => {
-    notasCtx.reloadNotas();
+    notasCtx.reloadNotas(true);
   };
 
   return (
@@ -16,7 +16,10 @@ const Header = () => {
         <FaMoneyBillWave className="text-3xl" />
         <p className="font-bold">Gimbo</p>
       </div>
-      <RiRefreshLine className="text-white text-3xl cursor-pointer" />
+      <RiRefreshLine
+        onClick={refreshNotasHandler}
+        className="text-white text-3xl cursor-pointer"
+      />
     </header>
   );
 };
