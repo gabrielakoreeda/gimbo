@@ -10,12 +10,19 @@ export const NotasContextProvider = (props) => {
   const [notas, setNotas] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const retrieveNotasFile = useCallback(async () => {
-    setIsLoading(true);
-    const response = await fetch("http://localhost:3000/api/notas");
-    response.json().then((data) => setNotas(data));
-    setIsLoading(false);
-  }, [setNotas, setIsLoading]);
+  const retrieveNotasFile = useCallback(
+    async (reload) => {
+      setIsLoading(true);
+      let endpoint = "http://localhost:3000/api/notas";
+      if (reload) {
+        endpoint += "?reload=true";
+      }
+      const response = await fetch(endpoint);
+      response.json().then((data) => setNotas(data));
+      setIsLoading(false);
+    },
+    [setNotas, setIsLoading]
+  );
 
   useEffect(() => {
     retrieveNotasFile();
