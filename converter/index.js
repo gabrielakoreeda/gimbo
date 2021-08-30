@@ -1,3 +1,4 @@
+const { data } = require("autoprefixer");
 let fs = require("fs");
 let PDFJS = require("pdfjs-dist/legacy/build/pdf.js");
 
@@ -12,10 +13,16 @@ const formatField = (operation, fieldName, str) => {
   return operation;
 };
 
-const converPDFToObject = async (filename, notas) => {
+const parsePrice = (operation, fieldName, str) => {
+  if (str.trim() !== "")
+    operation[fieldName] = parseFloat(str.replace(".", "").replace(",", "."));
+  return operation;
+};
+
+const convertPDFToObject = async (filename, notas) => {
   const pdf = await PDFJS.getDocument(filename).promise;
   const pages = await pdf.numPages;
-  for (let i = 2; i <= pages; i++) {
+  for (let i = 1; i <= pages; i++) {
     let dataIndex;
     let tableIndex;
     let tableHeader = {};
@@ -42,8 +49,8 @@ const converPDFToObject = async (filename, notas) => {
           tablePrev = item.str;
           if (index === tableHeaderEndIndex)
             tableHeader[tablePrev].end = item.transform[4] + item.width;
-        } else if (index !== tableHeaderEndIndex) {
-          tableHeader[tablePrev].end = item.transform[4];
+        } else {
+          tableHeader[tablePrev].end = item.transform[4] + item.width;
         }
       }
       if (index > tableHeaderEndIndex && !tableEnd) {
@@ -53,32 +60,32 @@ const converPDFToObject = async (filename, notas) => {
         }
         if (
           item.transform[4] >= tableHeader["Q"].start &&
-          item.transform[4] <= tableHeader["Q"].end
+          item.transform[4] < tableHeader["Q"].end
         ) {
           operation = formatField(operation, "Q", item.str);
         } else if (
           item.transform[4] >= tableHeader["Negociação"].start &&
-          item.transform[4] <= tableHeader["Negociação"].end
+          item.transform[4] < tableHeader["Negociação"].end
         ) {
           operation = formatField(operation, "Negociação", item.str);
         } else if (
           item.transform[4] >= tableHeader["C/V"].start &&
-          item.transform[4] <= tableHeader["C/V"].end
+          item.transform[4] < tableHeader["C/V"].end
         ) {
           operation = formatField(operation, "C/V", item.str);
         } else if (
           item.transform[4] >= tableHeader["Tipo mercado"].start &&
-          item.transform[4] <= tableHeader["Tipo mercado"].end
+          item.transform[4] < tableHeader["Tipo mercado"].end
         ) {
           operation = formatField(operation, "Tipo mercado", item.str);
         } else if (
           item.transform[4] >= tableHeader["Prazo"].start &&
-          item.transform[4] <= tableHeader["Prazo"].end
+          item.transform[4] < tableHeader["Prazo"].end
         ) {
           operation = formatField(operation, "Prazo", item.str);
         } else if (
           item.transform[4] >= tableHeader["Especificação do título"].start &&
-          item.transform[4] <= tableHeader["Especificação do título"].end
+          item.transform[4] < tableHeader["Especificação do título"].end
         ) {
           operation = formatField(
             operation,
@@ -87,31 +94,31 @@ const converPDFToObject = async (filename, notas) => {
           );
         } else if (
           item.transform[4] >= tableHeader["Obs. (*)"].start &&
-          item.transform[4] <= tableHeader["Obs. (*)"].end
+          item.transform[4] < tableHeader["Obs. (*)"].end
         ) {
           operation = formatField(operation, "Obs. (*)", item.str);
         } else if (
           item.transform[4] >= tableHeader["Quantidade"].start &&
-          item.transform[4] <= tableHeader["Quantidade"].end
+          item.transform[4] < tableHeader["Quantidade"].end
         ) {
-          operation = formatField(operation, "Quantidade", item.str);
+          operation = parsePrice(operation, "Quantidade", item.str);
         } else if (
           item.transform[4] >= tableHeader["Preço / Ajuste"].start &&
-          item.transform[4] <= tableHeader["Preço / Ajuste"].end
+          item.transform[4] < tableHeader["Preço / Ajuste"].end
         ) {
-          operation = formatField(operation, "Preço / Ajuste", item.str);
+          operation = parsePrice(operation, "Preço / Ajuste", item.str);
         } else if (
           item.transform[4] >= tableHeader["Valor Operação / Ajuste"].start &&
-          item.transform[4] <= tableHeader["Valor Operação / Ajuste"].end
+          item.transform[4] < tableHeader["Valor Operação / Ajuste"].end
         ) {
-          operation = formatField(
+          operation = parsePrice(
             operation,
             "Valor Operação / Ajuste",
             item.str
           );
         } else if (
           item.transform[4] >= tableHeader["D/C"].start &&
-          item.transform[4] <= tableHeader["D/C"].end
+          item.transform[4] < tableHeader["D/C"].end
         ) {
           operation = formatField(operation, "D/C", item.str);
         }
@@ -125,16 +132,161 @@ const converPDFToObject = async (filename, notas) => {
   }
 };
 
+const formatNotas = (notas) => {
+  let formattedNotas = {};
+  const accessor = "Especificação do título";
+  notas.forEach((nota) => {
+    const [day, month, year] = nota["Data pregão"].split("/");
+    let qtdCompra;
+    let qtdVenda;
+    let totalCompra;
+    let totalVenda;
+    let precoMedioCompra;
+    let precoMedioVenda;
+    if (nota["C/V"] === "V") {
+      qtdVenda = nota.Quantidade;
+      totalVenda = nota["Valor Operação / Ajuste"];
+      precoMedioVenda = totalVenda / qtdVenda;
+    } else {
+      qtdCompra = nota.Quantidade;
+      totalCompra = nota["Valor Operação / Ajuste"];
+      precoMedioCompra = totalCompra / qtdCompra;
+    }
+    if (Object.keys(formattedNotas).includes(nota[accessor])) {
+      formattedNotas[nota[accessor]].notas.push(nota);
+      formattedNotas[nota[accessor]] = {
+        ...formattedNotas[nota[accessor]],
+        qtdCompra: formattedNotas[nota[accessor]].qtdCompra + qtdCompra,
+        qtdVenda: formattedNotas[nota[accessor]].qtdVenda + qtdVenda,
+        totalCompra: formattedNotas[nota[accessor]].totalCompra + totalCompra,
+        totalVenda: formattedNotas[nota[accessor]].totalVenda + totalVenda,
+        precoMedioVenda:
+          (formattedNotas[nota[accessor]].totalVenda + totalVenda) /
+          (formattedNotas[nota[accessor]].qtdVenda + qtdVenda),
+        precoMedioCompra:
+          (formattedNotas[nota[accessor]].totalCompra + totalCompra) /
+          (formattedNotas[nota[accessor]].qtdCompra + qtdCompra),
+      };
+
+      if (
+        Object.keys(formattedNotas[nota[accessor]].months).includes(
+          `${month}/${year}`
+        )
+      ) {
+        formattedNotas[nota[accessor]].months[`${month}/${year}`] = {
+          ...formattedNotas[nota[accessor]].months[`${month}/${year}`],
+          qtdCompra:
+            formattedNotas[nota[accessor]].months[`${month}/${year}`]
+              .qtdCompra + qtdCompra,
+          qtdVenda:
+            formattedNotas[nota[accessor]].months[`${month}/${year}`].qtdVenda +
+            qtdVenda,
+          totalCompra:
+            formattedNotas[nota[accessor]].months[`${month}/${year}`]
+              .totalCompra + totalCompra,
+          totalVenda:
+            formattedNotas[nota[accessor]].months[`${month}/${year}`]
+              .totalVenda + totalVenda,
+          precoMedioVenda:
+            (formattedNotas[nota[accessor]].months[`${month}/${year}`]
+              .totalVenda +
+              totalVenda) /
+            (formattedNotas[nota[accessor]].months[`${month}/${year}`]
+              .qtdVenda +
+              qtdVenda),
+          precoMedioCompra:
+            (formattedNotas[nota[accessor]].months[`${month}/${year}`]
+              .totalCompra +
+              totalCompra) /
+            (formattedNotas[nota[accessor]].months[`${month}/${year}`]
+              .qtdCompra +
+              qtdCompra),
+        };
+      } else {
+        formattedNotas[nota[accessor]].months[`${month}/${year}`] = {
+          qtdCompra,
+          qtdVenda,
+          totalCompra,
+          totalVenda,
+          precoMedioVenda,
+          precoMedioCompra,
+        };
+      }
+      if (Object.keys(formattedNotas[nota[accessor]].years).includes(year)) {
+        formattedNotas[nota[accessor]].years[year] = {
+          ...formattedNotas[nota[accessor]].years[year],
+          qtdCompra:
+            formattedNotas[nota[accessor]].years[year].qtdCompra + qtdCompra,
+          qtdVenda:
+            formattedNotas[nota[accessor]].years[year].qtdVenda + qtdVenda,
+          totalCompra:
+            formattedNotas[nota[accessor]].years[year].totalCompra +
+            totalCompra,
+          totalVenda:
+            formattedNotas[nota[accessor]].years[year].totalVenda + totalVenda,
+          precoMedioVenda:
+            (formattedNotas[nota[accessor]].years[year].totalVenda +
+              totalVenda) /
+            (formattedNotas[nota[accessor]].years[year].qtdVenda + qtdVenda),
+          precoMedioCompra:
+            (formattedNotas[nota[accessor]].years[year].totalCompra +
+              totalCompra) /
+            (formattedNotas[nota[accessor]].years[year].qtdCompra + qtdCompra),
+        };
+      } else {
+        formattedNotas[nota[accessor]].years[year] = {
+          qtdCompra,
+          qtdVenda,
+          totalCompra,
+          totalVenda,
+          precoMedioVenda,
+          precoMedioCompra,
+        };
+      }
+    } else {
+      formattedNotas[nota[accessor]] = {
+        notas: [nota],
+        qtdCompra,
+        qtdVenda,
+        totalCompra,
+        totalVenda,
+        precoMedioVenda,
+        precoMedioCompra,
+        months: {},
+        years: {},
+      };
+      formattedNotas[nota[accessor]].months[`${month}/${year}`] = {
+        qtdCompra,
+        qtdVenda,
+        totalCompra,
+        totalVenda,
+        precoMedioVenda,
+        precoMedioCompra,
+      };
+      formattedNotas[nota[accessor]].years[year] = {
+        qtdCompra,
+        qtdVenda,
+        totalCompra,
+        totalVenda,
+        precoMedioVenda,
+        precoMedioCompra,
+      };
+    }
+  });
+  return formattedNotas;
+};
+
 const getAllNotas = async () => {
   let notas = [];
   fs.readdir(folder, async (err, files) => {
     for await (let file of files) {
       if (file.match(/\.pdf$/)) {
-        await converPDFToObject(`${folder}/${file}`, notas).catch((e) =>
+        await convertPDFToObject(`${folder}/${file}`, notas).catch((e) =>
           console.log(e)
         );
       }
     }
+    notas = formatNotas(notas);
     fs.writeFileSync(
       `${folder}/notas.json`,
       JSON.stringify(notas),
@@ -149,3 +301,5 @@ const getAllNotas = async () => {
 
 // export default getAllNotas;
 getAllNotas();
+
+// convertPDFToObject("./notas/2021-6.pdf", []);
