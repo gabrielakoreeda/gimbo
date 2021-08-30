@@ -74,14 +74,16 @@ const converPDFToObject = async (filename, nota) => {
       }
     });
     if (nota.hasOwnProperty(data)) {
-      if (nota[data].hasOwnProperty(corretora)) {
-        nota[data][corretora] = [...nota[data][corretora], operations];
-      } else {
-        nota[data][corretora] = operations;
-      }
+      nota[data] = [
+        ...nota[data],
+        operations.map((op) => {
+          return { ...op, corretora };
+        }),
+      ];
     } else {
-      nota[data] = {};
-      nota[data][corretora] = operations;
+      nota[data] = operations.map((op) => {
+        return { ...op, corretora };
+      });
     }
   }
   return nota;
@@ -91,9 +93,11 @@ const getAllNotas = async () => {
   let notas = {};
   fs.readdir(folder, async (err, files) => {
     for await (let file of files) {
-      notas = await converPDFToObject(`${folder}/${file}`, notas).catch((e) =>
-        console.log(e)
-      );
+      if (file.match(/\.pdf^/)) {
+        notas = await converPDFToObject(`${folder}/${file}`, notas).catch((e) =>
+          console.log(e)
+        );
+      }
     }
     fs.writeFile(`${folder}/notas.json`, JSON.stringify(notas), function (err) {
       if (err) {
