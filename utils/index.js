@@ -27,4 +27,4 @@ const formatPercentage = (value) => {
   return percent.toLocaleString("pt-br", { minimumFractionDigits: 2 });
 };
 
-export { formatMoney, formatPercentage };
+export { round, formatMoney, formatPercentage };
