@@ -4,24 +4,37 @@ const NotasContext = createContext({
   notas: [],
   isLoading: false,
   reloadNotas: () => {},
+  filter: (start, end) => {},
 });
 
 export const NotasContextProvider = (props) => {
   const [notas, setNotas] = useState([]);
+  const [filterPeriod, setFilterPeriod] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const filterHandler = (start, end) => {
+    setFilterPeriod([start, end]);
+  };
 
   const retrieveNotasFile = useCallback(
     async (reload) => {
       setIsLoading(true);
-      let endpoint = "http://localhost:3000/api/notas";
+      let endpoint = "http://localhost:3000/api/notas?";
+      const params = {};
       if (reload) {
-        endpoint += "?reload=true";
+        params.reload = true;
       }
-      const response = await fetch(endpoint);
-      response.json().then((data) => setNotas(data));
+      if (filterPeriod.length === 2) {
+        params.startDate = filterPeriod[0];
+        params.endDate = filterPeriod[1];
+      }
+      const response = await fetch(endpoint + new URLSearchParams(params));
+      response.json().then((data) => {
+        setNotas(data);
+      });
       setIsLoading(false);
     },
-    [setNotas, setIsLoading]
+    [setNotas, setIsLoading, filterPeriod]
   );
 
   useEffect(() => {
@@ -32,6 +45,7 @@ export const NotasContextProvider = (props) => {
     notas: notas,
     isLoading: isLoading,
     reloadNotas: retrieveNotasFile,
+    filter: filterHandler,
   };
 
   return (
