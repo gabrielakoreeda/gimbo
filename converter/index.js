@@ -132,6 +132,46 @@ const convertPDFToObject = async (filename, notas) => {
   }
 };
 
+const editDistance = (s1, s2) => {
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
+
+  var costs = new Array();
+  for (var i = 0; i <= s1.length; i++) {
+    var lastValue = i;
+    for (var j = 0; j <= s2.length; j++) {
+      if (i == 0) costs[j] = j;
+      else {
+        if (j > 0) {
+          var newValue = costs[j - 1];
+          if (s1.charAt(i - 1) != s2.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
+        }
+      }
+    }
+    if (i > 0) costs[s2.length] = lastValue;
+  }
+  return costs[s2.length];
+};
+
+const similarity = (s1, s2) => {
+  var longer = s1;
+  var shorter = s2;
+  if (s1.length < s2.length) {
+    longer = s2;
+    shorter = s1;
+  }
+  var longerLength = longer.length;
+  if (longerLength == 0) {
+    return 1.0;
+  }
+  return (
+    (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength)
+  );
+};
+
 const formatNotas = (notas) => {
   let formattedNotas = {};
   const accessor = "Especificação do título";
@@ -152,59 +192,59 @@ const formatNotas = (notas) => {
       totalCompra = nota["Valor Operação / Ajuste"];
       precoMedioCompra = totalCompra / qtdCompra;
     }
-    if (Object.keys(formattedNotas).includes(nota[accessor])) {
-      formattedNotas[nota[accessor]].notas.push(nota);
-      formattedNotas[nota[accessor]] = {
-        ...formattedNotas[nota[accessor]],
-        qtdCompra: formattedNotas[nota[accessor]].qtdCompra + qtdCompra || 0,
-        qtdVenda: formattedNotas[nota[accessor]].qtdVenda + qtdVenda || 0,
-        totalCompra:
-          formattedNotas[nota[accessor]].totalCompra + totalCompra || 0,
-        totalVenda: formattedNotas[nota[accessor]].totalVenda + totalVenda || 0,
+    if (
+      Object.keys(formattedNotas).some(
+        (n) => similarity(nota[accessor], n) >= 0.9
+      )
+    ) {
+      const ativo = Object.keys(formattedNotas).filter(
+        (n) => similarity(nota[accessor], n) >= 0.9
+      )[0];
+      formattedNotas[ativo].notas.push(nota);
+      formattedNotas[ativo] = {
+        ...formattedNotas[ativo],
+        qtdCompra: formattedNotas[ativo].qtdCompra + qtdCompra || 0,
+        qtdVenda: formattedNotas[ativo].qtdVenda + qtdVenda || 0,
+        totalCompra: formattedNotas[ativo].totalCompra + totalCompra || 0,
+        totalVenda: formattedNotas[ativo].totalVenda + totalVenda || 0,
         precoMedioVenda:
-          (formattedNotas[nota[accessor]].totalVenda + totalVenda) /
-            (formattedNotas[nota[accessor]].qtdVenda + qtdVenda) || 0,
+          (formattedNotas[ativo].totalVenda + totalVenda) /
+            (formattedNotas[ativo].qtdVenda + qtdVenda) || 0,
         precoMedioCompra:
-          (formattedNotas[nota[accessor]].totalCompra + totalCompra) /
-            (formattedNotas[nota[accessor]].qtdCompra + qtdCompra) || 0,
+          (formattedNotas[ativo].totalCompra + totalCompra) /
+            (formattedNotas[ativo].qtdCompra + qtdCompra) || 0,
       };
 
       if (
-        Object.keys(formattedNotas[nota[accessor]].months).includes(
-          `${month}/${year}`
-        )
+        Object.keys(formattedNotas[ativo].months).includes(`${month}/${year}`)
       ) {
-        formattedNotas[nota[accessor]].months[`${month}/${year}`] = {
-          ...formattedNotas[nota[accessor]].months[`${month}/${year}`],
+        formattedNotas[ativo].months[`${month}/${year}`] = {
+          ...formattedNotas[ativo].months[`${month}/${year}`],
           qtdCompra:
-            formattedNotas[nota[accessor]].months[`${month}/${year}`]
-              .qtdCompra + qtdCompra || 0,
+            formattedNotas[ativo].months[`${month}/${year}`].qtdCompra +
+              qtdCompra || 0,
           qtdVenda:
-            formattedNotas[nota[accessor]].months[`${month}/${year}`].qtdVenda +
+            formattedNotas[ativo].months[`${month}/${year}`].qtdVenda +
               qtdVenda || 0,
           totalCompra:
-            formattedNotas[nota[accessor]].months[`${month}/${year}`]
-              .totalCompra + totalCompra || 0,
+            formattedNotas[ativo].months[`${month}/${year}`].totalCompra +
+              totalCompra || 0,
           totalVenda:
-            formattedNotas[nota[accessor]].months[`${month}/${year}`]
-              .totalVenda + totalVenda || 0,
+            formattedNotas[ativo].months[`${month}/${year}`].totalVenda +
+              totalVenda || 0,
           precoMedioVenda:
-            (formattedNotas[nota[accessor]].months[`${month}/${year}`]
-              .totalVenda +
+            (formattedNotas[ativo].months[`${month}/${year}`].totalVenda +
               totalVenda) /
-              (formattedNotas[nota[accessor]].months[`${month}/${year}`]
-                .qtdVenda +
+              (formattedNotas[ativo].months[`${month}/${year}`].qtdVenda +
                 qtdVenda) || 0,
           precoMedioCompra:
-            (formattedNotas[nota[accessor]].months[`${month}/${year}`]
-              .totalCompra +
+            (formattedNotas[ativo].months[`${month}/${year}`].totalCompra +
               totalCompra) /
-              (formattedNotas[nota[accessor]].months[`${month}/${year}`]
-                .qtdCompra +
+              (formattedNotas[ativo].months[`${month}/${year}`].qtdCompra +
                 qtdCompra) || 0,
         };
       } else {
-        formattedNotas[nota[accessor]].months[`${month}/${year}`] = {
+        formattedNotas[ativo].months[`${month}/${year}`] = {
           qtdCompra,
           qtdVenda,
           totalCompra,
@@ -213,33 +253,25 @@ const formatNotas = (notas) => {
           precoMedioCompra,
         };
       }
-      if (Object.keys(formattedNotas[nota[accessor]].years).includes(year)) {
-        formattedNotas[nota[accessor]].years[year] = {
-          ...formattedNotas[nota[accessor]].years[year],
+      if (Object.keys(formattedNotas[ativo].years).includes(year)) {
+        formattedNotas[ativo].years[year] = {
+          ...formattedNotas[ativo].years[year],
           qtdCompra:
-            formattedNotas[nota[accessor]].years[year].qtdCompra + qtdCompra ||
-            0,
-          qtdVenda:
-            formattedNotas[nota[accessor]].years[year].qtdVenda + qtdVenda || 0,
+            formattedNotas[ativo].years[year].qtdCompra + qtdCompra || 0,
+          qtdVenda: formattedNotas[ativo].years[year].qtdVenda + qtdVenda || 0,
           totalCompra:
-            formattedNotas[nota[accessor]].years[year].totalCompra +
-              totalCompra || 0,
+            formattedNotas[ativo].years[year].totalCompra + totalCompra || 0,
           totalVenda:
-            formattedNotas[nota[accessor]].years[year].totalVenda +
-              totalVenda || 0,
+            formattedNotas[ativo].years[year].totalVenda + totalVenda || 0,
           precoMedioVenda:
-            (formattedNotas[nota[accessor]].years[year].totalVenda +
-              totalVenda) /
-              (formattedNotas[nota[accessor]].years[year].qtdVenda +
-                qtdVenda) || 0,
+            (formattedNotas[ativo].years[year].totalVenda + totalVenda) /
+              (formattedNotas[ativo].years[year].qtdVenda + qtdVenda) || 0,
           precoMedioCompra:
-            (formattedNotas[nota[accessor]].years[year].totalCompra +
-              totalCompra) /
-              (formattedNotas[nota[accessor]].years[year].qtdCompra +
-                qtdCompra) || 0,
+            (formattedNotas[ativo].years[year].totalCompra + totalCompra) /
+              (formattedNotas[ativo].years[year].qtdCompra + qtdCompra) || 0,
         };
       } else {
-        formattedNotas[nota[accessor]].years[year] = {
+        formattedNotas[ativo].years[year] = {
           qtdCompra,
           qtdVenda,
           totalCompra,
@@ -304,4 +336,5 @@ const getAllNotas = async () => {
   });
 };
 
-export default getAllNotas;
+// export default getAllNotas;
+getAllNotas();
