@@ -1,3 +1,4 @@
+import { useRouter } from "next/dist/client/router";
 import { useContext } from "react";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { RiRefreshLine } from "react-icons/ri";
@@ -5,8 +6,10 @@ import NotasContext from "../../store/notas-context";
 
 const Header = () => {
   const notasCtx = useContext(NotasContext);
+  const router = useRouter();
 
   const refreshNotasHandler = () => {
+    router.push("/");
     notasCtx.reloadNotas(true);
   };
 
