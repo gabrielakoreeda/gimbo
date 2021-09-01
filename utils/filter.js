@@ -1,3 +1,5 @@
+let fs = require("fs");
+const filename = "./notas/notas.json";
 import { round } from "./index";
 
 const filterNotas = (notas, startDate, endDate, type, ticker) => {
@@ -141,4 +143,24 @@ const groupBy = (notas) => {
   });
 };
 
-export { filterNotas, groupBy };
+const editTicker = (ticker, newTicker, type) => {
+  const notas = JSON.parse(fs.readFileSync(filename, "utf8"));
+  const updatedNotas = notas.map((nota) => {
+    const updatedNota = { ...nota };
+    if (newTicker && nota.ticker === ticker) {
+      updatedNota.ticker = newTicker;
+    }
+    if (type && nota.ticker === ticker) {
+      updatedNota.type = type;
+    }
+    return updatedNota;
+  });
+
+  fs.writeFileSync(filename, JSON.stringify(updatedNotas), function (err) {
+    if (err) {
+      return console.log(err);
+    }
+  });
+};
+
+export { filterNotas, groupBy, editTicker };
