@@ -12,7 +12,7 @@ const Filter = () => {
   };
 
   return (
-    <div className="space-x-2 w-full py-5 px-10 flex justify-end items-center">
+    <div className="space-x-2 w-full flex justify-end items-center">
       <span className="mr-2 font-bold text-gray-800">
         Filtrar por período de
       </span>
