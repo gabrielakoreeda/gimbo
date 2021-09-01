@@ -7,7 +7,7 @@ const Layout = (props) => {
   const notasCtx = useContext(NotasContext);
 
   return (
-    <main className="bg-indigo-100 h-screen flex flex-col">
+    <main className="bg-gray-200 h-screen flex flex-col">
       <Header />
       <div className="flex-grow relative">
         {notasCtx.isLoading && (
