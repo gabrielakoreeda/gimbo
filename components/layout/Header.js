@@ -13,9 +13,16 @@ const Header = () => {
     notasCtx.reloadNotas(true);
   };
 
+  const goToHome = () => {
+    router.push("/");
+  };
+
   return (
     <header className="shadow-2xl w-full p-4 bg-black flex justify-between">
-      <div className="text-green-500 text-2xl flex items-center space-x-2">
+      <div
+        className="text-green-500 text-2xl flex items-center space-x-2 cursor-pointer"
+        onClick={goToHome}
+      >
         <FaMoneyBillWave className="text-3xl" />
         <p className="font-bold">Gimbo</p>
       </div>
