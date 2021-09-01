@@ -1,3 +1,4 @@
+import { useRouter } from "next/dist/client/router";
 import { useEffect, createContext, useCallback, useState } from "react";
 
 const endpoint = "http://localhost:3000/api/notas?";
@@ -8,12 +9,14 @@ const NotasContext = createContext({
   reloadNotas: () => {},
   filter: (start, end) => {},
   getTicker: (ticker) => {},
+  editTicker: (ticker, newTicker, type) => {},
 });
 
 export const NotasContextProvider = (props) => {
   const [notas, setNotas] = useState([]);
   const [filterPeriod, setFilterPeriod] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const filterHandler = (start, end) => {
     setFilterPeriod([start, end]);
@@ -48,6 +51,19 @@ export const NotasContextProvider = (props) => {
     return nota;
   }, []);
 
+  const editTicker = ({ ticker, newTicker, type }) => {
+    setIsLoading(true);
+    const payload = { ticker, newTicker, type };
+    fetch(endpoint, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    }).then(() => {
+      retrieveNotasFile();
+      if (newTicker) router.replace(`/ativo/${newTicker}`);
+    });
+    setIsLoading(false);
+  };
+
   useEffect(() => {
     retrieveNotasFile();
   }, [retrieveNotasFile]);
@@ -58,6 +74,7 @@ export const NotasContextProvider = (props) => {
     reloadNotas: retrieveNotasFile,
     filter: filterHandler,
     getTicker: getTicker,
+    editTicker: editTicker,
   };
 
   return (
