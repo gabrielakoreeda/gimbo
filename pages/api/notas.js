@@ -1,7 +1,10 @@
-let fs = require("fs");
 import getAllNotas from "../../converter/index";
-import { filterNotas, groupBy, editTicker } from "../../utils/filter";
-const filename = "./notas/notas.json";
+import {
+  filterNotas,
+  groupBy,
+  editTicker,
+  readNotasFile,
+} from "../../utils/filter";
 
 export default function handler(req, res) {
   if (req.method === "GET") {
@@ -10,7 +13,7 @@ export default function handler(req, res) {
       getAllNotas();
     }
     try {
-      const notas = JSON.parse(fs.readFileSync(filename, "utf8"));
+      const notas = readNotasFile();
       const filteredNotas = filterNotas(
         notas,
         startDate,
@@ -26,7 +29,7 @@ export default function handler(req, res) {
       }
     } catch (err) {
       console.log(err);
-      res.status(500).send(`Error reading ${filename}`);
+      res.status(500).send(`Error reading notas.json`);
     }
   } else if (req.method === "PUT") {
     const { ticker, newTicker, type } = JSON.parse(req.body);

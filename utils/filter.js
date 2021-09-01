@@ -163,4 +163,9 @@ const editTicker = (ticker, newTicker, type) => {
   });
 };
 
-export { filterNotas, groupBy, editTicker };
+const readNotasFile = () => {
+  const notas = JSON.parse(fs.readFileSync(filename, "utf8"));
+  return notas;
+};
+
+export { filterNotas, groupBy, editTicker, readNotasFile };
