@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.3.3",
     "next": "11.1.0",
     "pdfjs-dist": "^2.9.359",
     "react": "17.0.2",
