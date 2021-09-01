@@ -4,6 +4,11 @@ const filterNotas = (notas, startDate, endDate, type, ticker) => {
   const filteredNotas = notas.filter((nota) => {
     let filter = true;
     const [day, month, year] = nota["Data pregão"].split("/");
+    if (ticker && ticker === nota.ticker) {
+      return true;
+    } else if (ticker) {
+      return false;
+    }
     if (startDate) {
       const [startYear, startMonth] = startDate.split("-");
       filter =
@@ -21,11 +26,6 @@ const filterNotas = (notas, startDate, endDate, type, ticker) => {
     if (type && type === nota.type) {
       filter = filter && true;
     } else if (type) {
-      filter = filter && false;
-    }
-    if (ticker && ticker === nota.ticker) {
-      filter = filter && true;
-    } else if (ticker) {
       filter = filter && false;
     }
     return filter;
