@@ -1,6 +1,7 @@
 import Head from "next/head";
 import "tailwindcss/tailwind.css";
 import { NotasContextProvider } from "../store/notas-context";
+import Layout from "../components/layout/Layout";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -9,7 +10,9 @@ function MyApp({ Component, pageProps }) {
         <title>Gimbo | Dashboard Investimentos</title>
       </Head>
       <NotasContextProvider>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </NotasContextProvider>
     </>
   );
