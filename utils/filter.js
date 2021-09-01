@@ -15,8 +15,8 @@ const filterNotas = (notas, startDate, endDate, type, ticker) => {
       const [endYear, endMonth] = endDate.split("-");
       filter =
         filter &&
-        parseInt(year) >= parseInt(endYear) &&
-        parseInt(month) >= parseInt(endMonth);
+        parseInt(year) <= parseInt(endYear) &&
+        parseInt(month) <= parseInt(endMonth);
     }
     if (type && type === nota.type) {
       filter = filter && true;
