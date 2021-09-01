@@ -37,4 +37,21 @@
     @apply border-gray-300 rounded focus:border-green-300 
     focus:ring-green-300 p-1;
   }
+  [type="text"]:disabled,
+  [type="email"]:disabled,
+  [type="url"]:disabled,
+  [type="password"]:disabled,
+  [type="number"]:disabled,
+  [type="date"]:disabled,
+  [type="datetime-local"]:disabled,
+  [type="month"]:disabled,
+  [type="search"]:disabled,
+  [type="tel"]:disabled,
+  [type="time"]:disabled,
+  [type="week"]:disabled,
+  [multiple]:disabled,
+  textarea:disabled,
+  select:disabled {
+    @apply cursor-not-allowed;
+  }
 }
