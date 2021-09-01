@@ -1,5 +1,5 @@
 import Head from "next/head";
-import "tailwindcss/tailwind.css";
+import "../styles/globals.css";
 import { NotasContextProvider } from "../store/notas-context";
 import Layout from "../components/layout/Layout";
 
