@@ -21,18 +21,10 @@ const Filter = () => {
         id="start"
         name="start"
         min="2018-03"
-        className="rounded p-1"
         ref={startRef}
       />
       <p className="font-bold text-gray-800">até</p>
-      <input
-        type="month"
-        id="start"
-        name="start"
-        min="2018-03"
-        className="rounded p-1"
-        ref={endRef}
-      />
+      <input type="month" id="start" name="start" min="2018-03" ref={endRef} />
       <Button onClick={filterHandler}>Buscar</Button>
     </div>
   );
