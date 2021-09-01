@@ -1,10 +1,13 @@
 import { useEffect, createContext, useCallback, useState } from "react";
 
+const endpoint = "http://localhost:3000/api/notas?";
+
 const NotasContext = createContext({
   notas: [],
   isLoading: false,
   reloadNotas: () => {},
   filter: (start, end) => {},
+  getTicker: (ticker) => {},
 });
 
 export const NotasContextProvider = (props) => {
@@ -19,7 +22,6 @@ export const NotasContextProvider = (props) => {
   const retrieveNotasFile = useCallback(
     async (reload) => {
       setIsLoading(true);
-      let endpoint = "http://localhost:3000/api/notas?";
       const params = {};
       if (reload) {
         params.reload = true;
@@ -37,6 +39,15 @@ export const NotasContextProvider = (props) => {
     [setNotas, setIsLoading, filterPeriod]
   );
 
+  const getTicker = useCallback(async (ticker) => {
+    setIsLoading(true);
+    const params = { ticker };
+    const response = await fetch(endpoint + new URLSearchParams(params));
+    const nota = await response.json();
+    setIsLoading(false);
+    return nota;
+  }, []);
+
   useEffect(() => {
     retrieveNotasFile();
   }, [retrieveNotasFile]);
@@ -46,6 +57,7 @@ export const NotasContextProvider = (props) => {
     isLoading: isLoading,
     reloadNotas: retrieveNotasFile,
     filter: filterHandler,
+    getTicker: getTicker,
   };
 
   return (
