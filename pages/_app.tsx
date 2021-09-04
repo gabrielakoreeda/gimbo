@@ -1,9 +1,10 @@
 import Head from "next/head";
 import "../styles/globals.css";
+import type { AppProps } from "next/app";
 import { NotasContextProvider } from "@store/notas-context";
 import Layout from "@components/layout/Layout";
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -17,5 +18,4 @@ function MyApp({ Component, pageProps }) {
     </>
   );
 }
-
 export default MyApp;
