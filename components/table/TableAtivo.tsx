@@ -1,7 +1,7 @@
-import { formatMoney } from "../../utils/index";
+import { formatMoney } from "@utils/index";
 import TableWrapper from "./TableWrapper";
 
-const TableAtivo = ({ notas }) => {
+const TableAtivo: React.FC<{ notas: Nota[] }> = ({ notas }) => {
   return (
     <TableWrapper>
       <table>
