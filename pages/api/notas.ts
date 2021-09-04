@@ -1,5 +1,10 @@
 import getAllNotas from "../../converter/index";
-import { filterNotas, groupBy, editTicker, readNotasFile } from "@utils/filter";
+import {
+  filterNotas,
+  groupBy,
+  editTicker,
+  readNotasFile,
+} from "@utils/query-notas";
 
 export default function handler(req, res) {
   if (req.method === "GET") {
