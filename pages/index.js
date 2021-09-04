@@ -1,6 +1,6 @@
-import Filter from "../components/Filter";
-import TablePosicoes from "../components/table/TablePosicoes";
-import NotasContext from "../store/notas-context";
+import Filter from "@components/Filter";
+import TablePosicoes from "@components/table/TablePosicoes";
+import NotasContext from "@store/notas-context";
 import { useContext } from "react";
 
 export default function Home() {
