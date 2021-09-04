@@ -4,7 +4,7 @@ import { useEffect, createContext, useCallback, useState } from "react";
 const endpoint = "http://localhost:3000/api/notas?";
 
 interface NotasContextType {
-  notas: Nota[];
+  notas: NotaConsolidada[];
   isLoading: boolean;
   reloadNotas: (reload: boolean) => void;
   filter: (start: string, end: string) => void;
