@@ -3,16 +3,25 @@ import { useEffect, createContext, useCallback, useState } from "react";
 
 const endpoint = "http://localhost:3000/api/notas?";
 
-const NotasContext = createContext({
+interface NotasContextType {
+  notas: Nota[];
+  isLoading: boolean;
+  reloadNotas: (reload: boolean) => void;
+  filter: (start: string, end: string) => void;
+  getTicker: (ticker: string) => Promise<Nota[]>;
+  editTicker: (ticker: string, newTicker: string, type: string) => void;
+}
+
+const NotasContext = createContext<NotasContextType>({
   notas: [],
   isLoading: false,
   reloadNotas: () => {},
-  filter: (start, end) => {},
-  getTicker: (ticker) => {},
-  editTicker: (ticker, newTicker, type) => {},
+  filter: () => {},
+  getTicker: async () => [],
+  editTicker: () => {},
 });
 
-export const NotasContextProvider = (props) => {
+export const NotasContextProvider: React.FC = ({ children }) => {
   const [notas, setNotas] = useState([]);
   const [filterPeriod, setFilterPeriod] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,15 +34,15 @@ export const NotasContextProvider = (props) => {
   const retrieveNotasFile = useCallback(
     async (reload) => {
       setIsLoading(true);
-      const params = {};
+      const params = new URLSearchParams();
       if (reload) {
-        params.reload = true;
+        params.append("reload", "true");
       }
       if (filterPeriod.length === 2) {
-        params.startDate = filterPeriod[0];
-        params.endDate = filterPeriod[1];
+        params.append("startDate", filterPeriod[0]);
+        params.append("endDate", filterPeriod[1]);
       }
-      const response = await fetch(endpoint + new URLSearchParams(params));
+      const response = await fetch(endpoint + params.toString());
       response.json().then((data) => {
         setNotas(data);
       });
@@ -51,21 +60,21 @@ export const NotasContextProvider = (props) => {
     return nota;
   }, []);
 
-  const editTicker = ({ ticker, newTicker, type }) => {
+  const editTicker = (ticker, newTicker, type) => {
     setIsLoading(true);
     const payload = { ticker, newTicker, type };
     fetch(endpoint, {
       method: "PUT",
       body: JSON.stringify(payload),
     }).then(() => {
-      retrieveNotasFile();
+      retrieveNotasFile(false);
       if (newTicker) router.replace(`/ativo/${newTicker}`);
     });
     setIsLoading(false);
   };
 
   useEffect(() => {
-    retrieveNotasFile();
+    retrieveNotasFile(false);
   }, [retrieveNotasFile]);
 
   const contextValue = {
@@ -79,7 +88,7 @@ export const NotasContextProvider = (props) => {
 
   return (
     <NotasContext.Provider value={contextValue}>
-      {props.children}
+      {children}
     </NotasContext.Provider>
   );
 };
