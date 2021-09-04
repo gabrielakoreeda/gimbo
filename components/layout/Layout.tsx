@@ -1,9 +1,9 @@
 import Header from "./Header";
 import { VscLoading } from "react-icons/vsc";
 import { useContext } from "react";
-import NotasContext from "../../store/notas-context";
+import NotasContext from "@store/notas-context";
 
-const Layout = (props) => {
+const Layout: React.FC = ({ children }) => {
   const notasCtx = useContext(NotasContext);
 
   return (
@@ -15,7 +15,7 @@ const Layout = (props) => {
             <VscLoading className="h-full animate-spin font-bold text-8xl m-auto" />
           </div>
         )}
-        {props.children}
+        {children}
       </div>
     </main>
   );
