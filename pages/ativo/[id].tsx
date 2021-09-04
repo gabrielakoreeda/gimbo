@@ -86,7 +86,20 @@ const Ativo = () => {
           <p className="text-gray-8 font-bold">
             Adicionar operação personalizada
           </p>
-          <div className="grid grid-cols-6 gap-5">
+          <div className="grid grid-cols-5 gap-5">
+            <div>
+              <label htmlFor="operationType">C/V:</label>
+              <select
+                id="operationType"
+                name="operationType"
+                className="w-full"
+                onChange={(e) => setType(e.target.value)}
+                disabled={!edit}
+              >
+                <option value="C">C</option>
+                <option value="V">V</option>
+              </select>
+            </div>
             <div className="flex flex-col">
               <label htmlFor="quantity">Quantidade: </label>
               <input type="number" id="quantity" name="quantity" min="0" />
@@ -107,7 +120,7 @@ const Ativo = () => {
               <label htmlFor="corretora">Corretora: </label>
               <input type="text" id="corretora" name="corretora" />
             </div>
-            <div className="flex flex-col col-span-full">
+            <div className="flex flex-col col-span-3">
               <label htmlFor="description">Descrição: </label>
               <textarea id="description" name="description" rows={1} />
             </div>
