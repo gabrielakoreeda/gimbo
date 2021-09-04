@@ -1,11 +1,11 @@
-import { useContext, useEffect, useRef } from "react";
-import NotasContext from "../store/notas-context";
+import { useContext, useRef } from "react";
+import NotasContext from "@store/notas-context";
 import Button from "./ui/Button";
 
-const Filter = () => {
+const Filter: React.FC = () => {
   const notasCtx = useContext(NotasContext);
-  const startRef = useRef();
-  const endRef = useRef();
+  const startRef = useRef<HTMLInputElement>(null);
+  const endRef = useRef<HTMLInputElement>(null);
 
   const filterHandler = () => {
     notasCtx.filter(startRef.current.value, endRef.current.value);
