@@ -180,8 +180,8 @@ const addNewNota = (
   corretora: string
 ) => {
   const notas = readNotasFile();
-  const lastId = notas[-1]?.id + 1 || 1;
-  notas.push({
+  const lastId = notas[notas.length - 1]?.id + 1 || 1;
+  const newOperation = {
     id: lastId,
     ticker,
     tipo: type,
@@ -192,7 +192,14 @@ const addNewNota = (
     "Valor Operação / Ajuste": totalPrice,
     Corretora: corretora,
     "Data pregão": date,
+  };
+  notas.push(newOperation);
+  fs.writeFileSync(filename, JSON.stringify(notas), function (err) {
+    if (err) {
+      return console.log(err);
+    }
   });
+  return newOperation;
 };
 
 export { filterNotas, groupBy, editTicker, readNotasFile, addNewNota };
