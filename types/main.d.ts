@@ -18,8 +18,12 @@ interface Nota {
 
 interface NotaConsolidada {
   ticker: string;
-  qtdCompra: number;
-  qtdVenda: number;
-  precoMedioCompra: number;
-  precoMedioVenda: number;
+  totalCompra: number | null;
+  totalVenda: number | null;
+  qtdCompra: number | null;
+  qtdVenda: number | null;
+  precoMedioCompra: number | null;
+  precoMedioVenda: number | null;
+  lucroRS: number | null;
+  lucroPerc: number | null;
 }
