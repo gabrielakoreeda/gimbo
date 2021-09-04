@@ -2,7 +2,7 @@ import { formatMoney } from "../../utils/index";
 import Link from "next/link";
 import TableWrapper from "./TableWrapper";
 
-const TablePosicoes = (props) => {
+const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
   return (
     <TableWrapper>
       <table>
@@ -14,7 +14,7 @@ const TablePosicoes = (props) => {
           </tr>
         </thead>
         <tbody>
-          {props.data.map((nota) => {
+          {props.notas?.map((nota) => {
             if (nota.qtdCompra - nota.qtdVenda > 0) {
               return (
                 <tr key={nota.ticker}>
