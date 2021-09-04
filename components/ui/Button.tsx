@@ -1,6 +1,6 @@
 const Button: React.FC<{
   pressed?: boolean;
-  onClick: () => void;
+  onClick?: (e: any) => void;
   type?: "button" | "submit" | "reset";
 }> = (props) => {
   let style = "bg-green-500 shadow-md";
