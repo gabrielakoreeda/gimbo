@@ -1,4 +1,4 @@
-const decimalAdjust = (type, value, exp) => {
+const decimalAdjust = (type: string, value: number, exp: number) => {
   if (typeof exp === "undefined" || +exp === 0) {
     return Math[type](value);
   }
@@ -7,22 +7,24 @@ const decimalAdjust = (type, value, exp) => {
   if (isNaN(value) || !(typeof exp === "number" && exp % 1 === 0)) {
     return NaN;
   }
-  value = value.toString().split("e");
-  value = Math[type](+(value[0] + "e" + (value[1] ? +value[1] - exp : -exp)));
-  value = value.toString().split("e");
-  return +(value[0] + "e" + (value[1] ? +value[1] + exp : exp));
+  let newValue = value.toString().split("e");
+  newValue = Math[type](
+    +(newValue[0] + "e" + (newValue[1] ? +newValue[1] - exp : -exp))
+  );
+  newValue = newValue.toString().split("e");
+  return +(newValue[0] + "e" + (newValue[1] ? +newValue[1] + exp : exp));
 };
 
-const round = (value, exp) => {
+const round = (value: number, exp: number): number => {
   return decimalAdjust("round", value, exp);
 };
 
-const formatMoney = (value) => {
+const formatMoney = (value: number): string => {
   const money = round(value, -2);
   return money.toLocaleString("pt-br", { style: "currency", currency: "BRL" });
 };
 
-const formatPercentage = (value) => {
+const formatPercentage = (value: number): string => {
   const percent = round(value, -2);
   return percent.toLocaleString("pt-br", { minimumFractionDigits: 2 });
 };
