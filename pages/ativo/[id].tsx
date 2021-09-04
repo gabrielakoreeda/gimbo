@@ -14,6 +14,15 @@ const Ativo = () => {
   const [ticker, setTicker] = useState("");
   const [type, setType] = useState("");
   const [edit, setEdit] = useState(false);
+  const [newOperation, setNewOperation] = useState<{
+    operationType?: string;
+    quantity?: number;
+    price?: number;
+    priceTotal?: number;
+    date?: string;
+    corretora?: string;
+    description?: string;
+  }>();
 
   useEffect(() => {
     const getDetails = async () => {
@@ -93,7 +102,11 @@ const Ativo = () => {
                 id="operationType"
                 name="operationType"
                 className="w-full"
-                onChange={(e) => setType(e.target.value)}
+                onChange={(e) =>
+                  setNewOperation((prev) => {
+                    return { ...prev, operationType: e.target.value };
+                  })
+                }
                 disabled={!edit}
               >
                 <option value="C">C</option>
@@ -102,27 +115,84 @@ const Ativo = () => {
             </div>
             <div className="flex flex-col">
               <label htmlFor="quantity">Quantidade: </label>
-              <input type="number" id="quantity" name="quantity" min="0" />
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                min="0"
+                onChange={(e) =>
+                  setNewOperation((prev) => {
+                    return { ...prev, quantity: parseFloat(e.target.value) };
+                  })
+                }
+              />
             </div>
             <div className="flex flex-col">
               <label htmlFor="price">Preço (R$): </label>
-              <input type="number" id="price" name="price" min="0" />
+              <input
+                type="number"
+                id="price"
+                name="price"
+                min="0"
+                onChange={(e) =>
+                  setNewOperation((prev) => {
+                    return { ...prev, price: parseFloat(e.target.value) };
+                  })
+                }
+              />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="price">Valor operação (R$): </label>
-              <input type="number" id="price" name="price" min="0" />
+              <label htmlFor="priceTotal">Valor operação (R$): </label>
+              <input
+                type="number"
+                id="priceTotal"
+                name="priceTotal"
+                min="0"
+                onChange={(e) =>
+                  setNewOperation((prev) => {
+                    return { ...prev, priceTotal: parseFloat(e.target.value) };
+                  })
+                }
+              />
             </div>
             <div className="flex flex-col">
               <label htmlFor="date">Data pregão:</label>
-              <input type="date" id="type" name="date" />
+              <input
+                type="date"
+                id="date"
+                name="date"
+                onChange={(e) =>
+                  setNewOperation((prev) => {
+                    return { ...prev, date: e.target.value };
+                  })
+                }
+              />
             </div>
             <div className="flex flex-col col-span-2">
               <label htmlFor="corretora">Corretora: </label>
-              <input type="text" id="corretora" name="corretora" />
+              <input
+                type="text"
+                id="corretora"
+                name="corretora"
+                onChange={(e) =>
+                  setNewOperation((prev) => {
+                    return { ...prev, corretora: e.target.value };
+                  })
+                }
+              />
             </div>
             <div className="flex flex-col col-span-3">
               <label htmlFor="description">Descrição: </label>
-              <textarea id="description" name="description" rows={1} />
+              <textarea
+                id="description"
+                name="description"
+                rows={1}
+                onChange={(e) =>
+                  setNewOperation((prev) => {
+                    return { ...prev, description: e.target.value };
+                  })
+                }
+              />
             </div>
           </div>
           <span className="w-full text-center">
