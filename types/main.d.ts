@@ -15,3 +15,11 @@ interface Nota {
   "Data pregão": string;
   type: FII;
 }
+
+interface NotaConsolidada {
+  ticker: string;
+  qtdCompra: number;
+  qtdVenda: number;
+  precoMedioCompra: number;
+  precoMedioVenda: number;
+}
