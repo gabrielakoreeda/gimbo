@@ -25,7 +25,7 @@ const filterNotas = (notas, startDate, endDate, type, ticker) => {
         parseInt(year) <= parseInt(endYear) &&
         parseInt(month) <= parseInt(endMonth);
     }
-    if (type && type === nota.type) {
+    if (type && type === nota.tipo) {
       filter = filter && true;
     } else if (type) {
       filter = filter && false;
@@ -151,7 +151,7 @@ const editTicker = (ticker, newTicker, type) => {
       updatedNota.ticker = newTicker;
     }
     if (type && nota.ticker === ticker) {
-      updatedNota.type = type;
+      updatedNota.tipo = type;
     }
     return updatedNota;
   });
@@ -163,9 +163,36 @@ const editTicker = (ticker, newTicker, type) => {
   });
 };
 
-const readNotasFile = () => {
+const readNotasFile = (): Nota[] => {
   const notas = JSON.parse(fs.readFileSync(filename, "utf8"));
   return notas;
 };
 
-export { filterNotas, groupBy, editTicker, readNotasFile };
+const addNewNota = (
+  ticker: string,
+  operationType: string,
+  type: string,
+  qtd: number,
+  price: number,
+  totalPrice: number,
+  date: string,
+  description: string,
+  corretora: string
+) => {
+  const notas = readNotasFile();
+  const lastId = notas[-1]?.id + 1 || 1;
+  notas.push({
+    id: lastId,
+    ticker,
+    tipo: type,
+    descricao: description,
+    "C/V": operationType,
+    Quantidade: qtd,
+    "Preço / Ajuste": price,
+    "Valor Operação / Ajuste": totalPrice,
+    Corretora: corretora,
+    "Data pregão": date,
+  });
+};
+
+export { filterNotas, groupBy, editTicker, readNotasFile, addNewNota };
