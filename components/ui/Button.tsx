@@ -1,4 +1,8 @@
-const Button = (props) => {
+const Button: React.FC<{
+  pressed?: boolean;
+  onClick: () => void;
+  type?: "button" | "submit" | "reset";
+}> = (props) => {
   let style = "bg-green-500 shadow-md";
   if (props.pressed) {
     style = "bg-green-600 shadow-sm";
