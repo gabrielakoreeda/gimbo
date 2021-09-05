@@ -5,8 +5,8 @@ import Button from "@components/ui/Button";
 import NotasContext from "@store/notas-context";
 
 const Ativo = () => {
-  const [notas, setNotas] = useState([]);
   const notaCtx = useContext(NotasContext);
+  const notas = notaCtx.currentTicker;
   const getTicker = notaCtx.getTicker;
   const router = useRouter();
   const { id } = router.query;
@@ -15,26 +15,28 @@ const Ativo = () => {
   const [type, setType] = useState("");
   const [edit, setEdit] = useState(false);
   const [newOperation, setNewOperation] = useState<{
-    operationType?: string;
-    quantity?: number;
-    price?: number;
-    priceTotal?: number;
-    date?: string;
-    corretora?: string;
-    description?: string;
-  }>();
+    ticker: string;
+    operationType: string;
+    quantity: number;
+    price: number;
+    priceTotal: number;
+    date: string;
+    corretora: string;
+    description: string;
+  }>({
+    ticker: "",
+    operationType: "",
+    quantity: 0,
+    price: 0,
+    priceTotal: 0,
+    date: "",
+    corretora: "",
+    description: "",
+  });
 
   useEffect(() => {
-    const getDetails = async () => {
-      getTicker(ativoTicker).then((data) => {
-        setNotas(data);
-        setType(data[0]?.tipo);
-        setTicker(ativoTicker);
-      });
-    };
-
-    getDetails();
-  }, [getTicker, ativoTicker]);
+    getTicker(ativoTicker);
+  }, [ativoTicker, getTicker]);
 
   const changeTickerHandler = (e) => {
     e.preventDefault();
@@ -45,6 +47,11 @@ const Ativo = () => {
   const editTickerHandler = (e) => {
     e.preventDefault();
     setEdit(true);
+  };
+
+  const addNewOperationHandler = (e) => {
+    e.preventDefault();
+    notaCtx.addNewOperation(newOperation);
   };
 
   return (
@@ -90,7 +97,7 @@ const Ativo = () => {
         </form>
         <form
           className="flex flex-col space-y-2 w-full relative border border-gray-400 rounded p-3 shadow"
-          onSubmit={changeTickerHandler}
+          onSubmit={addNewOperationHandler}
         >
           <p className="text-gray-8 font-bold">
             Adicionar operação personalizada
