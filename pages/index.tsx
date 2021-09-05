@@ -6,7 +6,7 @@ import { useContext } from "react";
 
 const Home: NextPage = () => {
   const notasCtx = useContext(NotasContext);
-  const notas = notasCtx.notas;
+  const notas = notasCtx.notasConsolidadas;
 
   return (
     <>
