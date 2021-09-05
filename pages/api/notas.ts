@@ -1,33 +1,15 @@
 import getAllNotas from "../../converter/index";
-import {
-  filterNotas,
-  groupBy,
-  editTicker,
-  readNotasFile,
-  addNewNota,
-} from "@utils/query-notas";
+import { editTicker, readNotasFile, addNewNota } from "@utils/wr-notas";
 
 export default function handler(req, res) {
   if (req.method === "GET") {
-    const { reload, startDate, endDate, type, ticker } = req.query;
+    const { reload } = req.query;
     if (reload) {
       getAllNotas();
     }
     try {
       const notas = readNotasFile();
-      const filteredNotas = filterNotas(
-        notas,
-        startDate,
-        endDate,
-        type,
-        ticker
-      );
-      if (!ticker) {
-        const groupedNotas = groupBy(filteredNotas);
-        res.status(200).json(groupedNotas);
-      } else {
-        res.status(200).json(filteredNotas);
-      }
+      res.status(200).json(notas);
     } catch (err) {
       console.log(err);
       res.status(500).send(`Error reading notas.json`);
