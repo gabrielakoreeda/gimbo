@@ -1,4 +1,3 @@
-import Filter from "@components/Filter";
 import TablePosicoes from "@components/table/TablePosicoes";
 import NotasContext from "@store/notas-context";
 import { NextPage } from "next";
@@ -10,7 +9,6 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Filter />
       <div className="flex flex-col">
         <h2 className="font-bold text-gray-800 mb-2">Posições Abertas</h2>
         <TablePosicoes notas={notas} />
