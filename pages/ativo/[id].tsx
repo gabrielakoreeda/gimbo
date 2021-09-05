@@ -10,7 +10,6 @@ const Ativo = () => {
   const getTicker = notaCtx.getTicker;
   const router = useRouter();
   const { id } = router.query;
-  const ativoTicker = id.toString();
   const [ticker, setTicker] = useState("");
   const [type, setType] = useState("");
   const [edit, setEdit] = useState(false);
@@ -35,13 +34,15 @@ const Ativo = () => {
   });
 
   useEffect(() => {
+    const ativoTicker = id?.toString();
+    setTicker(ativoTicker);
     getTicker(ativoTicker);
-  }, [ativoTicker, getTicker]);
+  }, [getTicker, id]);
 
   const changeTickerHandler = (e) => {
     e.preventDefault();
     setEdit(false);
-    notaCtx.editTicker(ativoTicker, ticker !== id ? ticker : null, type);
+    notaCtx.editTicker(id?.toString(), ticker !== id ? ticker : null, type);
   };
 
   const editTickerHandler = (e) => {
