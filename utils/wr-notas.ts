@@ -50,6 +50,7 @@ const addNewNota = (
     "Valor Operação / Ajuste": totalPrice,
     Corretora: corretora,
     "Data pregão": date,
+    manual: true,
   };
   notas.push(newOperation);
   fs.writeFileSync(filename, JSON.stringify(notas), function (err) {
