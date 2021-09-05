@@ -54,6 +54,7 @@ const convertPDFToObject = async (filename, notas) => {
       }
       if (index > tableHeaderEndIndex && !tableEnd) {
         if (Object.keys(operation).includes("D/C")) {
+          operation.manual = false;
           operations.push(operation);
           operation = {};
         }
