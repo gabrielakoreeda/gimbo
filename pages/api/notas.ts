@@ -1,4 +1,4 @@
-import getAllNotas from "../../converter/index";
+import getAllNotas from "@utils/converter";
 import { editTicker, readNotasFile, addNewNota } from "@utils/wr-notas";
 
 export default function handler(req, res) {

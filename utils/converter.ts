@@ -1,4 +1,3 @@
-const { data } = require("autoprefixer");
 let fs = require("fs");
 let PDFJS = require("pdfjs-dist/legacy/build/pdf.js");
 
