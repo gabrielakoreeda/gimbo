@@ -40,7 +40,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   const [notasConsolidadas, setNotasConsolidadas] = useState<NotaConsolidada[]>(
     []
   );
-  const [currentTicker, setCurrentTicker] = useState<Nota[]>();
+  const [currentTicker, setCurrentTicker] = useState<Nota[]>([]);
   const [filterPeriod, setFilterPeriod] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
