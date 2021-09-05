@@ -2,8 +2,18 @@ import Button from "@components/ui/Button";
 import NotasContext from "@store/notas-context";
 import { useContext, useState } from "react";
 
-const NewOperationForm: React.FC = () => {
+const NewOperationForm: React.FC<{ ticker: string }> = ({ ticker }) => {
   const notaCtx = useContext(NotasContext);
+  const emptyOperation = {
+    ticker: ticker,
+    operationType: "",
+    quantity: 0,
+    price: 0,
+    priceTotal: 0,
+    date: "",
+    corretora: "",
+    description: "",
+  };
   const [newOperation, setNewOperation] = useState<{
     ticker: string;
     operationType: string;
@@ -13,20 +23,12 @@ const NewOperationForm: React.FC = () => {
     date: string;
     corretora: string;
     description: string;
-  }>({
-    ticker: "",
-    operationType: "",
-    quantity: 0,
-    price: 0,
-    priceTotal: 0,
-    date: "",
-    corretora: "",
-    description: "",
-  });
+  }>(emptyOperation);
 
   const addNewOperationHandler = (e) => {
     e.preventDefault();
     notaCtx.addNewOperation(newOperation);
+    setNewOperation(emptyOperation);
   };
 
   return (
@@ -61,7 +63,11 @@ const NewOperationForm: React.FC = () => {
             min="0"
             onChange={(e) =>
               setNewOperation((prev) => {
-                return { ...prev, quantity: parseFloat(e.target.value) };
+                return {
+                  ...prev,
+                  quantity: parseFloat(e.target.value),
+                  priceTotal: parseFloat(e.target.value) * prev.price,
+                };
               })
             }
           />
@@ -75,7 +81,11 @@ const NewOperationForm: React.FC = () => {
             min="0"
             onChange={(e) =>
               setNewOperation((prev) => {
-                return { ...prev, price: parseFloat(e.target.value) };
+                return {
+                  ...prev,
+                  price: parseFloat(e.target.value),
+                  priceTotal: parseFloat(e.target.value) * prev.quantity,
+                };
               })
             }
           />
@@ -87,11 +97,8 @@ const NewOperationForm: React.FC = () => {
             id="priceTotal"
             name="priceTotal"
             min="0"
-            onChange={(e) =>
-              setNewOperation((prev) => {
-                return { ...prev, priceTotal: parseFloat(e.target.value) };
-              })
-            }
+            disabled
+            value={newOperation.priceTotal || 0}
           />
         </div>
         <div className="flex flex-col">
