@@ -1,6 +1,7 @@
 import { formatMoney } from "../../utils/index";
 import Link from "next/link";
 import TableWrapper from "./TableWrapper";
+import Button from "../ui/Button";
 
 const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
   return (
@@ -11,6 +12,7 @@ const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
             <th>Ativo</th>
             <th>Preço médio de compra</th>
             <th>Quantidade</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -25,6 +27,13 @@ const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
                   </td>
                   <td>{formatMoney(nota.precoMedioCompra)}</td>
                   <td>{nota.qtdCompra}</td>
+                  <td>
+                    <Button>
+                      <Link href={`/ativo/${nota.ticker}`}>
+                        <a>Detalhes</a>
+                      </Link>
+                    </Button>
+                  </td>
                 </tr>
               );
             }
