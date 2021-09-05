@@ -3,6 +3,7 @@ interface Nota {
   ticker: string;
   tipo: string;
   descricao?: string;
+  manual: boolean;
   Negociação?: string;
   "C/V": string;
   "Tipo mercado"?: string;
