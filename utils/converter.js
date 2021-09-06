@@ -148,7 +148,7 @@ const formatNotas = (notas) => {
   return formattedNotas;
 };
 
-const getAllNotas = async () => {
+const getAllNotas = async (readNewOnly) => {
   let notas = [];
   fs.readdir(folder, async (err, files) => {
     for await (let file of files) {
@@ -159,6 +159,19 @@ const getAllNotas = async () => {
       }
     }
     notas = formatNotas(notas);
+    if (readNewOnly) {
+      let lastIndex = notas.length;
+      const oldNotas = readNotasFile();
+      const manualNotas = oldNotas
+        .filter((nota) => nota.manual)
+        .map((nota, index) => {
+          return {
+            ...nota,
+            id: lastIndex + index,
+          };
+        });
+      notas.push(...manualNotas);
+    }
     fs.writeFileSync(
       `${folder}/notas.json`,
       JSON.stringify(notas),
