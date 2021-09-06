@@ -1,0 +1,32 @@
+.selected {
+  @apply relative text-gray-700 font-bold;
+}
+
+.selected > span {
+  @apply bg-green-500 text-white;
+}
+
+.selected:before {
+  border-right: 17px solid rgba(243, 244, 246, var(--tw-bg-opacity));
+  border-top: 17px solid transparent;
+  border-bottom: 17px solid transparent;
+  content: "";
+  display: inline-block;
+  position: absolute;
+  right: -20px;
+  opacity: 1;
+  top: 0px;
+  transition: opacity 150ms ease-in;
+}
+
+.selected:after {
+  position: absolute;
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 7.5px;
+  right: -20px;
+  top: 14.5px;
+  background-color: rgba(16, 185, 129, var(--tw-text-opacity));
+}
