@@ -5,6 +5,7 @@ import { useEffect, createContext, useCallback, useState } from "react";
 const endpoint = "http://localhost:3000/api/notas?";
 
 interface NotasContextType {
+  notas: Nota[];
   notasConsolidadas: NotaConsolidada[];
   currentTicker: Nota[];
   isLoading: boolean;
@@ -25,6 +26,7 @@ interface NotasContextType {
 }
 
 const NotasContext = createContext<NotasContextType>({
+  notas: [],
   notasConsolidadas: [],
   currentTicker: [],
   isLoading: false,
@@ -110,6 +112,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   }, [notas]);
 
   const contextValue = {
+    notas: notas,
     notasConsolidadas: notasConsolidadas,
     currentTicker: currentTicker,
     isLoading: isLoading,
