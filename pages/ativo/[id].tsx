@@ -4,6 +4,7 @@ import TableAtivo from "@components/table/TableAtivo";
 import NewOperationForm from "@components/forms/NewOperationForm";
 import Button from "@components/ui/Button";
 import NotasContext from "@store/notas-context";
+import ErrorMessagePopUp from "@components/ui/ErrorMessagePopUp";
 
 const Ativo = () => {
   const notaCtx = useContext(NotasContext);
@@ -14,6 +15,7 @@ const Ativo = () => {
   const [ticker, setTicker] = useState("");
   const [type, setType] = useState("");
   const [edit, setEdit] = useState(false);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   useEffect(() => {
     const ativoTicker = id?.toString();
@@ -73,9 +75,13 @@ const Ativo = () => {
             )}
           </span>
         </form>
-        <NewOperationForm />
+        <NewOperationForm ticker={ticker} setErrorMessages={setErrorMessages} />
       </div>
       <TableAtivo notas={notas} />
+      <ErrorMessagePopUp
+        errorMessages={errorMessages}
+        setErrorMessages={setErrorMessages}
+      />
     </>
   );
 };
