@@ -61,4 +61,15 @@ const addNewNota = (
   return newOperation;
 };
 
-export { editTicker, readNotasFile, addNewNota };
+const deleteManualNotas = () => {
+  const notas = readNotasFile();
+  const newNotas = notas.filter((nota) => nota.manual === false);
+  fs.writeFileSync(filename, JSON.stringify(newNotas), function (err) {
+    if (err) {
+      return console.log(err);
+    }
+  });
+  return newNotas;
+};
+
+export { editTicker, readNotasFile, addNewNota, deleteManualNotas };
