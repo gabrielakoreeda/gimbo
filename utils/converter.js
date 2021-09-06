@@ -1,5 +1,6 @@
 let fs = require("fs");
 let PDFJS = require("pdfjs-dist/legacy/build/pdf.js");
+import { readNotasFile } from "@utils/wr-notas";
 
 const folder = "./notas/";
 
