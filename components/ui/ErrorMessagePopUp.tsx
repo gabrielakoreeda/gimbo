@@ -8,7 +8,7 @@ const ErrorMessagePopUp: React.FC<{
   setErrorMessages: Dispatch<SetStateAction<string[]>>;
 }> = ({ errorMessages, setErrorMessages }) => {
   const [mounted, setMounted] = useState(false);
-  const [showMessages, setShowMessages] = useState(true);
+  const [showMessages, setShowMessages] = useState(false);
 
   useEffect(() => {
     setMounted(true);
