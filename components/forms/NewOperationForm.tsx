@@ -47,8 +47,9 @@ const NewOperationForm: React.FC<{
   const addNewOperationHandler = (e) => {
     e.preventDefault();
     if (validateFields()) {
-      notaCtx.addNewOperation(newOperation);
-      setNewOperation(emptyOperation);
+      console.log(newOperation);
+      // notaCtx.addNewOperation(newOperation);
+      // setNewOperation(emptyOperation);
     }
   };
 
@@ -102,6 +103,7 @@ const NewOperationForm: React.FC<{
             id="price"
             name="price"
             min="0"
+            step="0.01"
             value={newOperation.price || 0}
             onChange={(e) =>
               setNewOperation((prev) => {
@@ -121,6 +123,7 @@ const NewOperationForm: React.FC<{
             id="priceTotal"
             name="priceTotal"
             min="0"
+            step="0.01"
             disabled
             value={newOperation.priceTotal || 0}
           />
