@@ -8,7 +8,7 @@ interface NotasContextType {
   notasConsolidadas: NotaConsolidada[];
   currentTicker: Nota[];
   isLoading: boolean;
-  reloadNotas: (reload: boolean) => void;
+  reloadNotas: (reload: string) => void;
   filter: (start: string, end: string) => void;
   getTicker: (ticker: string) => void;
   editTicker: (ticker: string, newTicker: string, type: string) => void;
