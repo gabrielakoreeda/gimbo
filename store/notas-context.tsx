@@ -50,11 +50,11 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   };
 
   const retrieveNotasFile = useCallback(
-    async (reload) => {
+    async (param?) => {
       setIsLoading(true);
       const params = new URLSearchParams();
-      if (reload) {
-        params.append("reload", "true");
+      if (param) {
+        params.append(param, "true");
       }
       const response = await fetch(endpoint + params.toString());
       response.json().then((data) => {
@@ -82,7 +82,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
       method: "PUT",
       body: JSON.stringify(payload),
     }).then(() => {
-      retrieveNotasFile(false);
+      retrieveNotasFile();
       if (newTicker) router.replace(`/ativo/${newTicker}`);
     });
     setIsLoading(false);
@@ -101,7 +101,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    retrieveNotasFile(false);
+    retrieveNotasFile();
   }, [retrieveNotasFile]);
 
   useEffect(() => {
