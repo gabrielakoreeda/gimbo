@@ -1,11 +1,20 @@
 import getAllNotas from "@utils/converter";
-import { editTicker, readNotasFile, addNewNota } from "@utils/wr-notas";
+import {
+  editTicker,
+  readNotasFile,
+  addNewNota,
+  deleteManualNotas,
+} from "@utils/wr-notas";
 
 export default function handler(req, res) {
   if (req.method === "GET") {
-    const { reload } = req.query;
-    if (reload) {
+    const { reset, reload, remove } = req.query;
+    if (reset) {
       getAllNotas();
+    } else if (reload) {
+      getAllNotas(true);
+    } else if (remove) {
+      deleteManualNotas();
     }
     try {
       const notas = readNotasFile();
