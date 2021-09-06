@@ -1,12 +1,15 @@
 import Button from "@components/ui/Button";
 import NotasContext from "@store/notas-context";
-import { useContext, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 
-const NewOperationForm: React.FC<{ ticker: string }> = ({ ticker }) => {
+const NewOperationForm: React.FC<{
+  ticker: string;
+  setErrorMessages: Dispatch<SetStateAction<string[]>>;
+}> = ({ ticker, setErrorMessages }) => {
   const notaCtx = useContext(NotasContext);
   const emptyOperation = {
     ticker: ticker,
-    operationType: "",
+    operationType: "C",
     quantity: 0,
     price: 0,
     priceTotal: 0,
@@ -25,10 +28,28 @@ const NewOperationForm: React.FC<{ ticker: string }> = ({ ticker }) => {
     description: string;
   }>(emptyOperation);
 
+  const validateFields = () => {
+    const errorMessages = [];
+    if (newOperation.quantity <= 0)
+      errorMessages.push("Quantidade precisa ser maior que 0");
+    if (newOperation.price <= 0)
+      errorMessages.push("Preço precisa ser maior que 0");
+    if (newOperation.date === "")
+      errorMessages.push("O campo Data pregão precisa ser preenchido");
+    if (newOperation.corretora === "")
+      errorMessages.push("O campo Corretora precisa ser preenchido");
+    if (newOperation.description === "")
+      errorMessages.push("O campo Descrição precisa ser preenchido");
+    setErrorMessages(errorMessages);
+    return errorMessages.length === 0;
+  };
+
   const addNewOperationHandler = (e) => {
     e.preventDefault();
-    notaCtx.addNewOperation(newOperation);
-    setNewOperation(emptyOperation);
+    if (validateFields()) {
+      notaCtx.addNewOperation(newOperation);
+      setNewOperation(emptyOperation);
+    }
   };
 
   return (
@@ -44,6 +65,7 @@ const NewOperationForm: React.FC<{ ticker: string }> = ({ ticker }) => {
             id="operationType"
             name="operationType"
             className="w-full"
+            value={newOperation.operationType}
             onChange={(e) =>
               setNewOperation((prev) => {
                 return { ...prev, operationType: e.target.value };
@@ -61,6 +83,7 @@ const NewOperationForm: React.FC<{ ticker: string }> = ({ ticker }) => {
             id="quantity"
             name="quantity"
             min="0"
+            value={newOperation.quantity | 0}
             onChange={(e) =>
               setNewOperation((prev) => {
                 return {
@@ -79,6 +102,7 @@ const NewOperationForm: React.FC<{ ticker: string }> = ({ ticker }) => {
             id="price"
             name="price"
             min="0"
+            value={newOperation.price || 0}
             onChange={(e) =>
               setNewOperation((prev) => {
                 return {
@@ -107,6 +131,7 @@ const NewOperationForm: React.FC<{ ticker: string }> = ({ ticker }) => {
             type="date"
             id="date"
             name="date"
+            value={newOperation.date || ""}
             onChange={(e) =>
               setNewOperation((prev) => {
                 return { ...prev, date: e.target.value };
@@ -120,6 +145,7 @@ const NewOperationForm: React.FC<{ ticker: string }> = ({ ticker }) => {
             type="text"
             id="corretora"
             name="corretora"
+            value={newOperation.corretora || ""}
             onChange={(e) =>
               setNewOperation((prev) => {
                 return { ...prev, corretora: e.target.value };
@@ -133,6 +159,7 @@ const NewOperationForm: React.FC<{ ticker: string }> = ({ ticker }) => {
             id="description"
             name="description"
             rows={1}
+            value={newOperation.description || ""}
             onChange={(e) =>
               setNewOperation((prev) => {
                 return { ...prev, description: e.target.value };
