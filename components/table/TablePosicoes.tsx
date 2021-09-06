@@ -21,7 +21,7 @@ const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
               return (
                 <tr key={nota.ticker}>
                   <td>
-                    <Link href={`/ativo/${nota.ticker}`}>
+                    <Link href={`/ativos/${nota.ticker}`}>
                       <a>{nota.ticker}</a>
                     </Link>
                   </td>
@@ -29,7 +29,7 @@ const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
                   <td>{nota.qtdCompra}</td>
                   <td>
                     <Button>
-                      <Link href={`/ativo/${nota.ticker}`}>
+                      <Link href={`/ativos/${nota.ticker}`}>
                         <a>Detalhes</a>
                       </Link>
                     </Button>
