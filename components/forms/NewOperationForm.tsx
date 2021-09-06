@@ -1,6 +1,12 @@
 import Button from "@components/ui/Button";
 import NotasContext from "@store/notas-context";
-import { Dispatch, SetStateAction, useContext, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const NewOperationForm: React.FC<{
   ticker: string;
@@ -28,6 +34,12 @@ const NewOperationForm: React.FC<{
     description: string;
   }>(emptyOperation);
 
+  useEffect(() => {
+    setNewOperation((prev) => {
+      return { ...prev, ticker };
+    });
+  }, [ticker]);
+
   const validateFields = () => {
     const errorMessages = [];
     if (newOperation.quantity <= 0)
@@ -47,9 +59,8 @@ const NewOperationForm: React.FC<{
   const addNewOperationHandler = (e) => {
     e.preventDefault();
     if (validateFields()) {
-      console.log(newOperation);
-      // notaCtx.addNewOperation(newOperation);
-      // setNewOperation(emptyOperation);
+      notaCtx.addNewOperation(newOperation);
+      setNewOperation(emptyOperation);
     }
   };
 
@@ -90,7 +101,9 @@ const NewOperationForm: React.FC<{
                 return {
                   ...prev,
                   quantity: parseFloat(e.target.value),
-                  priceTotal: parseFloat(e.target.value) * prev.price,
+                  priceTotal: parseFloat(
+                    (parseFloat(e.target.value) * prev.price).toFixed(2)
+                  ),
                 };
               })
             }
@@ -110,7 +123,9 @@ const NewOperationForm: React.FC<{
                 return {
                   ...prev,
                   price: parseFloat(e.target.value),
-                  priceTotal: parseFloat(e.target.value) * prev.quantity,
+                  priceTotal: parseFloat(
+                    (parseFloat(e.target.value) * prev.quantity).toFixed(2)
+                  ),
                 };
               })
             }
