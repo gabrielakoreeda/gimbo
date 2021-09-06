@@ -1,4 +1,3 @@
-import Header from "./Header";
 import Sidebar from "./Sidebar";
 import { VscLoading } from "react-icons/vsc";
 import { useContext } from "react";
@@ -9,7 +8,6 @@ const Layout: React.FC = ({ children }) => {
 
   return (
     <main className="bg-gray-100 h-screen flex">
-      {/* <Header /> */}
       <Sidebar />
       <div className="w-5/6 relative px-10 py-5 overflow-y-hidden">
         {notasCtx.isLoading && (
