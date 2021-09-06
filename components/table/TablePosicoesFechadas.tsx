@@ -12,12 +12,11 @@ const TablePosicoesFechadas: React.FC<{ notas: NotaConsolidada[] }> = (
         <thead>
           <tr>
             <th>Ativo</th>
-            <th>Quantidade</th>
+            <th>Qtd</th>
             <th>Preço médio de compra</th>
             <th>Preço médio de venda</th>
             <th>Lucro (R$)</th>
             <th>Lucro (%)</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -25,7 +24,7 @@ const TablePosicoesFechadas: React.FC<{ notas: NotaConsolidada[] }> = (
             if (nota.qtdCompra - nota.qtdVenda === 0) {
               return (
                 <tr key={nota.ticker}>
-                  <td>
+                  <td className="text-green-500">
                     <Link href={`/ativos/${nota.ticker}`}>
                       <a>{nota.ticker}</a>
                     </Link>
@@ -46,13 +45,6 @@ const TablePosicoesFechadas: React.FC<{ notas: NotaConsolidada[] }> = (
                     }
                   >
                     {nota.lucroPerc}
-                  </td>
-                  <td>
-                    <Button>
-                      <Link href={`/ativos/${nota.ticker}`}>
-                        <a>Detalhes</a>
-                      </Link>
-                    </Button>
                   </td>
                 </tr>
               );

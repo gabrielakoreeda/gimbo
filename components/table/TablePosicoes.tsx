@@ -11,8 +11,7 @@ const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
           <tr>
             <th>Ativo</th>
             <th>Preço médio de compra</th>
-            <th>Quantidade</th>
-            <th></th>
+            <th>Qtd</th>
           </tr>
         </thead>
         <tbody>
@@ -20,20 +19,13 @@ const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
             if (nota.qtdCompra - nota.qtdVenda > 0) {
               return (
                 <tr key={nota.ticker}>
-                  <td>
+                  <td className="text-green-500">
                     <Link href={`/ativos/${nota.ticker}`}>
                       <a>{nota.ticker}</a>
                     </Link>
                   </td>
                   <td>{formatMoney(nota.precoMedioCompra)}</td>
                   <td>{nota.qtdCompra}</td>
-                  <td>
-                    <Button>
-                      <Link href={`/ativos/${nota.ticker}`}>
-                        <a>Detalhes</a>
-                      </Link>
-                    </Button>
-                  </td>
                 </tr>
               );
             }
