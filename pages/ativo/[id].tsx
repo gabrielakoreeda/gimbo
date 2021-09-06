@@ -35,7 +35,7 @@ const Ativo = () => {
   };
 
   return (
-    <>
+    <div className="flex flex-col h-full">
       <div className="flex space-x-5 mb-4 items-end">
         <form
           className="flex flex-col max-w-min border border-gray-400 rounded p-3 shadow-md"
@@ -82,7 +82,7 @@ const Ativo = () => {
         errorMessages={errorMessages}
         setErrorMessages={setErrorMessages}
       />
-    </>
+    </div>
   );
 };
 
