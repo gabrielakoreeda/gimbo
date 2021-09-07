@@ -30,7 +30,13 @@ const Sidebar: React.FC = () => {
                 <Link href={item.path}>
                   <a
                     className={`flex items-center ${
-                      router.pathname === item.path ? styles.selected : ""
+                      (
+                        item.path === "/"
+                          ? router.pathname === item.path
+                          : router.pathname.includes(item.path)
+                      )
+                        ? styles.selected
+                        : ""
                     }`}
                   >
                     <span className="mr-2 bg-gray-300 p-2 rounded-md">
