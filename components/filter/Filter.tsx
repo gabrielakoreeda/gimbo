@@ -5,7 +5,8 @@ import OperationTypeFilter from "./OperationTypeFilter";
 import Button from "../ui/Button";
 
 interface FilterInput {
-  searchText: string;
+  titulo: string;
+  corretora: string;
   startDate: Date;
   endDate: Date;
   operationType: string;
@@ -17,15 +18,26 @@ const Filter: React.FC<{
   onSearch: () => void;
 }> = ({ filterInput, setFilterInput, onSearch }) => {
   return (
-    <div className="grid grid-flow-col grid-cols-8 my-5 gap-1">
+    <div className="grid grid-flow-col grid-cols-9 my-5 gap-1">
       <SearchBox
-        searchText={filterInput.searchText}
-        setSearchText={(searchText: string) => {
+        placeholder="Buscar título"
+        searchText={filterInput.titulo}
+        setSearchText={(titulo: string) => {
           setFilterInput((prev) => {
-            return { ...prev, searchText: searchText };
+            return { ...prev, titulo: titulo };
           });
         }}
-        className="col-span-3"
+        className="col-span-2 rounded-l"
+      />
+      <SearchBox
+        placeholder="Buscar corretora"
+        searchText={filterInput.corretora}
+        setSearchText={(corretora: string) => {
+          setFilterInput((prev) => {
+            return { ...prev, corretora: corretora };
+          });
+        }}
+        className="col-span-2"
       />
       <OperationTypeFilter
         className="col-span-2"
