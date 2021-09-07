@@ -1,11 +1,13 @@
 import Button from "@components/ui/Button";
 import PageTitle from "@components/ui/PageTitle";
 import NotasContext from "@store/notas-context";
+import Link from "next/link";
 import { NextPage } from "next";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 const Configuracoes: NextPage = () => {
   const notasCtx = useContext(NotasContext);
+  const [key, setKey] = useState(notasCtx.apiKey);
 
   const resetNotasHandler = () => {
     notasCtx.reloadNotas("reset");
@@ -17,6 +19,10 @@ const Configuracoes: NextPage = () => {
 
   const removeManualHandler = () => {
     notasCtx.reloadNotas("remove");
+  };
+
+  const saveYahooAPIKeyHandler = () => {
+    notasCtx.saveAPIKey(key);
   };
 
   return (
@@ -44,11 +50,34 @@ const Configuracoes: NextPage = () => {
         <h2 className="font-bold text-gray-600 text-md">
           Remover notas personalizadas
         </h2>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-10">
           <p className="text-gray-600">
             Remove todas as notas personalizadas adicionadas manualmente.
           </p>
           <Button onClick={removeManualHandler}>Aplicar</Button>
+        </div>
+        <h2 className="font-bold text-gray-600 text-md">
+          Adicionar chave API Yahoo Finance
+        </h2>
+        <div>
+          <p className="text-gray-600">
+            A API é utilizada para buscar informações adicionais sobre cada
+            ativo. A chave pode ser gerada em: {}
+            <Link href="https://rapidapi.com/apidojo/api/yahoo-finance1/">
+              <a className="text-green-600">
+                https://rapidapi.com/apidojo/api/yahoo-finance1/
+              </a>
+            </Link>
+          </p>
+          <div className="flex mt-2">
+            <input
+              type="text"
+              className="w-1/2"
+              value={key}
+              onChange={(e) => setKey(e.target.value)}
+            />
+            <Button onClick={saveYahooAPIKeyHandler}>Adicionar</Button>
+          </div>
         </div>
       </div>
     </>
