@@ -10,9 +10,9 @@ const Posicoes: NextPage = () => {
   const notas = notasCtx.notasConsolidadas;
 
   return (
-    <>
+    <div className="flex flex-col h-full">
       <PageTitle title="Posições" />
-      <div className="grid grid-cols-3 gap-10">
+      <div className="flex overflow-y-auto space-x-4">
         <div className="flex flex-col">
           <h2 className="font-bold text-gray-800 mb-2">Posições Abertas</h2>
           <TablePosicoes notas={notas} />
@@ -22,7 +22,7 @@ const Posicoes: NextPage = () => {
           <TablePosicoesFechadas notas={notas} />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
