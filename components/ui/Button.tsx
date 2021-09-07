@@ -12,7 +12,7 @@ const Button: React.FC<{
     <button
       onClick={props.onClick}
       type={props.type || "button"}
-      className={`flex items-center px-4 py-2 rounded font-bold text-white text-sm hover:shadow-sm hover:bg-green-600 transition ${style}`}
+      className={`flex items-center justify-center px-4 py-2 rounded font-bold text-white text-sm hover:shadow-sm hover:bg-green-600 transition ${style}`}
     >
       {props.children}
     </button>
