@@ -1,31 +1,42 @@
 import { round } from "./index";
 
-const filterNotas = (notas, startDate, endDate, type, ticker) => {
+const filterNotas = (
+  notas: Nota[],
+  startDate?: Date,
+  endDate?: Date,
+  type?: string,
+  ticker?: string,
+  corretora?: string
+) => {
   const filteredNotas = notas.filter((nota) => {
     let filter = true;
     const [day, month, year] = nota["Data pregão"].split("/");
-    if (ticker && ticker === nota.ticker) {
+    const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    if (
+      ticker !== "" &&
+      nota.ticker.toLowerCase().includes(ticker.toLowerCase())
+    ) {
       return true;
-    } else if (ticker) {
+    } else if (ticker !== "") {
+      return false;
+    }
+    if (
+      corretora !== "" &&
+      nota.Corretora.toLowerCase().includes(corretora.toLowerCase())
+    ) {
+      return true;
+    } else if (corretora !== "") {
       return false;
     }
     if (startDate) {
-      const [startYear, startMonth] = startDate.split("-");
-      filter =
-        filter &&
-        parseInt(year) >= parseInt(startYear) &&
-        parseInt(month) >= parseInt(startMonth);
+      filter = filter && date >= startDate;
     }
     if (endDate) {
-      const [endYear, endMonth] = endDate.split("-");
-      filter =
-        filter &&
-        parseInt(year) <= parseInt(endYear) &&
-        parseInt(month) <= parseInt(endMonth);
+      filter = filter && date <= endDate;
     }
-    if (type && type === nota.tipo) {
+    if (type !== "" && type === nota["C/V"]) {
       filter = filter && true;
-    } else if (type) {
+    } else if (type !== "") {
       filter = filter && false;
     }
     return filter;
