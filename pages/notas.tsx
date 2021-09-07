@@ -45,6 +45,17 @@ const Notas: NextPage = () => {
     setFilteredNotas(filtered);
   };
 
+  const clearFilter = () => {
+    setFilteredNotas(notas);
+    setFilterInput({
+      titulo: "",
+      corretora: "",
+      startDate: null,
+      endDate: null,
+      operationType: "",
+    });
+  };
+
   const toggleNotasType = () => {
     setNotasType((prev) =>
       prev === "importadas" ? "personalizadas" : "importadas"
@@ -74,7 +85,10 @@ const Notas: NextPage = () => {
     <div className="flex flex-col h-full">
       <div className="flex justify-between">
         <PageTitle title="Notas" />
-        <span>
+        <span className="flex space-x-2">
+          <span>
+            <Button onClick={clearFilter}>Limpar Filtros</Button>
+          </span>
           <a ref={downloadRef}>
             <Button onClick={downloadTableHandler}>
               <FaDownload className="mr-2" />
