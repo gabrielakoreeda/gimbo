@@ -1,5 +1,6 @@
 import TableAtivo from "@components/table/TableAtivo";
 import TableAtivoPersonalizado from "@components/table/TableAtivoPersonalizado";
+import Filter from "@components/filter/Filter";
 import Button from "@components/ui/Button";
 import PageTitle from "@components/ui/PageTitle";
 import NotasContext from "@store/notas-context";
@@ -12,6 +13,23 @@ const Notas: NextPage = () => {
   const notas = notaCtx.notas;
   const downloadRef = useRef<HTMLAnchorElement>();
   const [notasType, setNotasType] = useState("importadas");
+  const [filterInput, setFilterInput] = useState<{
+    titulo: string;
+    corretora: string;
+    startDate: Date;
+    endDate: Date;
+    operationType: string;
+  }>({
+    titulo: "",
+    corretora: "",
+    startDate: null,
+    endDate: null,
+    operationType: "",
+  });
+
+  const onSearchHandler = () => {
+    console.log(filterInput);
+  };
 
   const toggleNotasType = () => {
     setNotasType((prev) =>
@@ -20,10 +38,10 @@ const Notas: NextPage = () => {
   };
 
   const downloadTableHandler = () => {
-    const replacer = (key, value) => (value === null ? "" : value); // specify how you want to handle null values here
+    const replacer = (key, value) => (value === null ? "" : value);
     const header = Object.keys(notas[0]);
     const csv = [
-      header.join(","), // header row first
+      header.join(","),
       ...notas.map((row) =>
         header
           .map((fieldName) => JSON.stringify(row[fieldName], replacer))
@@ -51,7 +69,7 @@ const Notas: NextPage = () => {
           </a>
         </span>
       </div>
-      <div className="flex mb-4">
+      <div className="flex">
         <p
           className={`border-b-2 pb-2 px-2 ${
             notasType === "importadas"
@@ -74,6 +92,11 @@ const Notas: NextPage = () => {
         </p>
         <span className="flex-grow border-b-2 border-gray-300"></span>
       </div>
+      <Filter
+        filterInput={filterInput}
+        setFilterInput={setFilterInput}
+        onSearch={onSearchHandler}
+      />
       {notasType === "importadas" && <TableAtivo notas={notas} />}
       {notasType === "personalizadas" && (
         <TableAtivoPersonalizado notas={notas} />
