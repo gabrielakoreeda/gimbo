@@ -39,6 +39,8 @@ const addNewNota = (
 ) => {
   const notas = readNotasFile();
   const lastId = notas[notas.length - 1]?.id + 1 || 1;
+  const [year, month, day] = date.split("-");
+  const formattedDate = `${day}/${month}/${year}`;
   const newOperation = {
     id: lastId,
     ticker,
@@ -49,7 +51,7 @@ const addNewNota = (
     "Preço / Ajuste": price,
     "Valor Operação / Ajuste": totalPrice,
     Corretora: corretora,
-    "Data pregão": date,
+    "Data pregão": formattedDate,
     manual: true,
   };
   notas.push(newOperation);
