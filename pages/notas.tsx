@@ -14,6 +14,7 @@ const Notas: NextPage = () => {
   const notas = notaCtx.notas;
   const [filteredNotas, setFilteredNotas] = useState<Nota[]>([]);
   const downloadRef = useRef<HTMLAnchorElement>();
+  const [isLoading, setIsLoading] = useState(true);
   const [notasType, setNotasType] = useState("importadas");
   const [filterInput, setFilterInput] = useState<{
     titulo: string;
@@ -31,9 +32,11 @@ const Notas: NextPage = () => {
 
   useEffect(() => {
     setFilteredNotas(notas);
+    setIsLoading(false);
   }, [notas]);
 
   const onSearchHandler = () => {
+    setIsLoading(true);
     const filtered = filterNotas(
       notas,
       filterInput.startDate,
@@ -43,9 +46,11 @@ const Notas: NextPage = () => {
       filterInput.corretora
     );
     setFilteredNotas(filtered);
+    setIsLoading(false);
   };
 
   const clearFilter = () => {
+    setIsLoading(true);
     setFilteredNotas(notas);
     setFilterInput({
       titulo: "",
@@ -54,6 +59,7 @@ const Notas: NextPage = () => {
       endDate: null,
       operationType: "",
     });
+    setIsLoading(false);
   };
 
   const toggleNotasType = () => {
@@ -125,7 +131,9 @@ const Notas: NextPage = () => {
         setFilterInput={setFilterInput}
         onSearch={onSearchHandler}
       />
-      {notasType === "importadas" && <TableAtivo notas={filteredNotas} />}
+      {notasType === "importadas" && (
+        <TableAtivo notas={filteredNotas} isLoading={isLoading} />
+      )}
       {notasType === "personalizadas" && (
         <TableAtivoPersonalizado notas={filteredNotas} />
       )}
