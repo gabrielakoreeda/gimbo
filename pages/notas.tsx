@@ -6,11 +6,13 @@ import PageTitle from "@components/ui/PageTitle";
 import NotasContext from "@store/notas-context";
 import { FaDownload } from "react-icons/fa";
 import { NextPage } from "next";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { filterNotas } from "@utils/query-notas";
 
 const Notas: NextPage = () => {
   const notaCtx = useContext(NotasContext);
   const notas = notaCtx.notas;
+  const [filteredNotas, setFilteredNotas] = useState<Nota[]>([]);
   const downloadRef = useRef<HTMLAnchorElement>();
   const [notasType, setNotasType] = useState("importadas");
   const [filterInput, setFilterInput] = useState<{
@@ -27,8 +29,20 @@ const Notas: NextPage = () => {
     operationType: "",
   });
 
+  useEffect(() => {
+    setFilteredNotas(notas);
+  }, [notas]);
+
   const onSearchHandler = () => {
-    console.log(filterInput);
+    const filtered = filterNotas(
+      notas,
+      filterInput.startDate,
+      filterInput.endDate,
+      filterInput.operationType,
+      filterInput.titulo,
+      filterInput.corretora
+    );
+    setFilteredNotas(filtered);
   };
 
   const toggleNotasType = () => {
@@ -97,9 +111,9 @@ const Notas: NextPage = () => {
         setFilterInput={setFilterInput}
         onSearch={onSearchHandler}
       />
-      {notasType === "importadas" && <TableAtivo notas={notas} />}
+      {notasType === "importadas" && <TableAtivo notas={filteredNotas} />}
       {notasType === "personalizadas" && (
-        <TableAtivoPersonalizado notas={notas} />
+        <TableAtivoPersonalizado notas={filteredNotas} />
       )}
     </div>
   );
