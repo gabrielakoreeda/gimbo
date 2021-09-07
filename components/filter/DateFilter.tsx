@@ -1,32 +1,22 @@
-import { useContext, useRef } from "react";
-import NotasContext from "@store/notas-context";
-import Button from "../ui/Button";
+import { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const DateFilter: React.FC = () => {
-  const notasCtx = useContext(NotasContext);
-  const startRef = useRef<HTMLInputElement>(null);
-  const endRef = useRef<HTMLInputElement>(null);
-
-  const filterHandler = () => {
-    notasCtx.filter(startRef.current.value, endRef.current.value);
-  };
+  const [startDate, setStartDate] = useState<Date>(null);
+  const [endDate, setEndDate] = useState<Date>(null);
 
   return (
-    <div className="space-x-2 w-full flex justify-end items-center">
-      <span className="mr-2 font-bold text-gray-800">
-        Filtrar por período de
-      </span>
-      <input
-        type="month"
-        id="start"
-        name="start"
-        min="2018-03"
-        ref={startRef}
-      />
-      <p className="font-bold text-gray-800">até</p>
-      <input type="month" id="start" name="start" min="2018-03" ref={endRef} />
-      <Button onClick={filterHandler}>Buscar</Button>
-    </div>
+    <DatePicker
+      selectsRange={true}
+      startDate={startDate}
+      endDate={endDate}
+      onChange={(update) => {
+        setStartDate(update[0]);
+        setEndDate(update[1]);
+      }}
+      isClearable={true}
+    />
   );
 };
 
