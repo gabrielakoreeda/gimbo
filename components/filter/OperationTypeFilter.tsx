@@ -17,12 +17,10 @@ const OperationTypeFilter: React.FC<{
           operationType === "" ? "text-gray-500" : "text-black"
         }`}
         placeholder="C/V"
-        value={operationType || "default"}
+        value={operationType || ""}
         onChange={(e) => setOperationType(e.target.value)}
       >
-        <option value="default" disabled hidden>
-          Tipo de operação
-        </option>
+        <option value="">Tipo de operação</option>
         <option value="C">C</option>
         <option value="V">V</option>
       </select>
