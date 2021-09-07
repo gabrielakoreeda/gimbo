@@ -15,6 +15,7 @@ const DateFilter: React.FC<{
     >
       <FaCalendar className="text-gray-400 mx-2" />
       <DatePicker
+        dateFormat="dd/MM/yyyy"
         selectsRange={true}
         startDate={startDate}
         endDate={endDate}
