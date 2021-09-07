@@ -1,12 +1,5 @@
 import { useRouter } from "next/dist/client/router";
-import {
-  FaMoneyBillWave,
-  FaCog,
-  FaCoins,
-  FaMoneyBillWaveAlt,
-} from "react-icons/fa";
-import { IoReceipt } from "react-icons/io5";
-import { MdDashboard } from "react-icons/md";
+import { FaMoneyBillWave } from "react-icons/fa";
 import Link from "next/link";
 
 import styles from "./Sidebar.module.css";
