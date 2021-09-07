@@ -1,6 +1,6 @@
 const TableWrapper: React.FC = ({ children }) => {
   return (
-    <div className="rounded border border-gray-400 overflow-y-auto">
+    <div className="rounded border border-gray-300 overflow-y-auto">
       {children}
     </div>
   );

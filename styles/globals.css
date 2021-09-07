@@ -20,7 +20,7 @@
     @apply text-left font-bold text-sm text-gray-800;
   }
   table tbody tr:not(:last-child) {
-    @apply border-b border-gray-400;
+    @apply border-b border-gray-300;
   }
   [type="text"],
   [type="email"],
