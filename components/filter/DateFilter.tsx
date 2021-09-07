@@ -1,8 +1,8 @@
 import { useContext, useRef } from "react";
 import NotasContext from "@store/notas-context";
-import Button from "./ui/Button";
+import Button from "../ui/Button";
 
-const Filter: React.FC = () => {
+const DateFilter: React.FC = () => {
   const notasCtx = useContext(NotasContext);
   const startRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLInputElement>(null);
@@ -30,4 +30,4 @@ const Filter: React.FC = () => {
   );
 };
 
-export default Filter;
+export default DateFilter;
