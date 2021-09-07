@@ -3,9 +3,12 @@ import { FaMoneyBillWaveAlt } from "react-icons/fa";
 const OperationTypeFilter: React.FC<{
   operationType: string;
   setOperationType: (operationType: string) => void;
-}> = ({ operationType, setOperationType }) => {
+  className?: string;
+}> = ({ operationType, setOperationType, className }) => {
   return (
-    <div className="flex items-center w-full space-x-2 bg-white border border-transparent focus-within:border-green-300 focus-within:ring-1 focus-within:ring-green-300">
+    <div
+      className={`flex items-center w-full space-x-2 bg-white border border-transparent focus-within:border-green-300 focus-within:ring-1 focus-within:ring-green-300 ${className}`}
+    >
       <FaMoneyBillWaveAlt className="text-gray-400 mx-2" />
       <select
         name="cars"
