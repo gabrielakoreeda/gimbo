@@ -1,6 +1,6 @@
 let fs = require("fs");
 let PDFJS = require("pdfjs-dist/legacy/build/pdf.js");
-import { readNotasFile } from "@utils/wr-notas";
+import { readFile } from "@utils/wr-notas";
 
 const folder = "./notas/";
 
@@ -149,7 +149,7 @@ const formatNotas = (notas) => {
   return formattedNotas;
 };
 
-const getAllNotas = async (readNewOnly) => {
+const convertAllPDFs = async (readNewOnly) => {
   let notas = [];
   fs.readdir(folder, async (err, files) => {
     for await (let file of files) {
@@ -162,7 +162,7 @@ const getAllNotas = async (readNewOnly) => {
     notas = formatNotas(notas);
     if (readNewOnly) {
       let lastIndex = notas.length;
-      const oldNotas = readNotasFile();
+      const oldNotas = readFile();
       const manualNotas = oldNotas
         .filter((nota) => nota.manual)
         .map((nota, index) => {
@@ -185,4 +185,4 @@ const getAllNotas = async (readNewOnly) => {
   });
 };
 
-export default getAllNotas;
+export default convertAllPDFs;

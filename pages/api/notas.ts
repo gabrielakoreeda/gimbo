@@ -1,7 +1,7 @@
-import getAllNotas from "@utils/converter";
+import convertAllPDFs from "@utils/converter";
 import {
   editTicker,
-  readNotasFile,
+  readFile,
   addNewNota,
   deleteManualNotas,
 } from "@utils/wr-notas";
@@ -10,14 +10,14 @@ export default function handler(req, res) {
   if (req.method === "GET") {
     const { reset, reload, remove } = req.query;
     if (reset) {
-      getAllNotas();
+      convertAllPDFs();
     } else if (reload) {
-      getAllNotas(true);
+      convertAllPDFs(true);
     } else if (remove) {
       deleteManualNotas();
     }
     try {
-      const notas = readNotasFile();
+      const notas = readFile();
       res.status(200).json(notas);
     } catch (err) {
       console.log(err);
