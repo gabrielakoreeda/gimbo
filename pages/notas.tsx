@@ -2,6 +2,7 @@ import TableAtivo from "@components/table/TableAtivo";
 import TableAtivoPersonalizado from "@components/table/TableAtivoPersonalizado";
 import Filter from "@components/filter/Filter";
 import Button from "@components/ui/Button";
+import SelectionTabs from "@components/ui/SelectionTabs";
 import PageTitle from "@components/ui/PageTitle";
 import NotasContext from "@store/notas-context";
 import { FaDownload } from "react-icons/fa";
@@ -103,29 +104,14 @@ const Notas: NextPage = () => {
           </a>
         </span>
       </div>
-      <div className="flex">
-        <p
-          className={`border-b-2 pb-2 px-2 ${
-            notasType === "importadas"
-              ? "border-green-600 text-green-600"
-              : "border-gray-300 cursor-pointer"
-          }`}
-          onClick={toggleNotasType}
-        >
-          Notas importadas
-        </p>
-        <p
-          className={`border-b-2 pb-2 px-2 ${
-            notasType === "personalizadas"
-              ? "border-green-600 text-green-600"
-              : "border-gray-300 cursor-pointer"
-          }`}
-          onClick={toggleNotasType}
-        >
-          Notas personalizadas
-        </p>
-        <span className="flex-grow border-b-2 border-gray-300"></span>
-      </div>
+      <SelectionTabs
+        selectedTab={notasType}
+        toggleSelected={toggleNotasType}
+        tabs={[
+          { label: "Notas importadas", value: "importadas" },
+          { label: "Notas personalizadas", value: "personalizadas" },
+        ]}
+      />
       <Filter
         filterInput={filterInput}
         setFilterInput={setFilterInput}
