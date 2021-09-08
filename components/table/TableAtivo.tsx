@@ -2,7 +2,7 @@ import { formatMoney } from "@utils/index";
 import { VscLoading } from "react-icons/vsc";
 import TableWrapper from "./TableWrapper";
 
-const TableAtivo: React.FC<{ notas: Nota[]; isLoading: boolean }> = ({
+const TableAtivo: React.FC<{ notas: Nota[]; isLoading?: boolean }> = ({
   notas,
   isLoading,
 }) => {
