@@ -104,7 +104,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
       body: JSON.stringify(payload),
     }).then(() => {
       retrieveNotasFile();
-      if (newTicker) router.replace(`/ativo/${newTicker}`);
+      if (newTicker) router.replace(`/ativos/${newTicker}`);
     });
     setIsLoading(false);
   };
