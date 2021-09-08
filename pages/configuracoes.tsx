@@ -21,7 +21,7 @@ const Configuracoes: NextPage = () => {
     notasCtx.reloadNotas("remove");
   };
 
-  const saveYahooAPIKeyHandler = () => {
+  const saveMarketstackAPIKeyHandler = () => {
     notasCtx.saveAPIKey(key);
   };
 
@@ -57,16 +57,14 @@ const Configuracoes: NextPage = () => {
           <Button onClick={removeManualHandler}>Aplicar</Button>
         </div>
         <h2 className="font-bold text-gray-600 text-md">
-          Adicionar chave API Yahoo Finance
+          Adicionar chave API Marketstack
         </h2>
         <div>
           <p className="text-gray-600">
             A API é utilizada para buscar informações adicionais sobre cada
             ativo. A chave pode ser gerada em: {}
-            <Link href="https://rapidapi.com/apidojo/api/yahoo-finance1/">
-              <a className="text-green-600">
-                https://rapidapi.com/apidojo/api/yahoo-finance1/
-              </a>
+            <Link href="https://marketstack.com/signup">
+              <a className="text-green-600">https://marketstack.com/signup</a>
             </Link>
           </p>
           <div className="flex mt-2">
@@ -76,7 +74,7 @@ const Configuracoes: NextPage = () => {
               value={key}
               onChange={(e) => setKey(e.target.value)}
             />
-            <Button onClick={saveYahooAPIKeyHandler}>Adicionar</Button>
+            <Button onClick={saveMarketstackAPIKeyHandler}>Adicionar</Button>
           </div>
         </div>
       </div>
