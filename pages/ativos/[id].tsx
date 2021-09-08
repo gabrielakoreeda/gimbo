@@ -5,6 +5,8 @@ import NewOperationForm from "@components/forms/NewOperationForm";
 import NotasContext from "@store/notas-context";
 import ErrorMessagePopUp from "@components/ui/ErrorMessagePopUp";
 import EditTickerForm from "@components/forms/EditTickerForm";
+import SelectionTabs from "@components/ui/SelectionTabs";
+import TableAtivoPersonalizado from "@components/table/TableAtivoPersonalizado";
 
 const Ativo = () => {
   const notaCtx = useContext(NotasContext);
@@ -15,6 +17,7 @@ const Ativo = () => {
   const [ticker, setTicker] = useState("");
   const [type, setType] = useState("");
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [notasType, setNotasType] = useState("importadas");
 
   useEffect(() => {
     const ativoTicker = id?.toString();
@@ -26,9 +29,15 @@ const Ativo = () => {
     notaCtx.editTicker(id?.toString(), ticker !== id ? ticker : null, type);
   };
 
+  const toggleNotasType = () => {
+    setNotasType((prev) =>
+      prev === "importadas" ? "personalizadas" : "importadas"
+    );
+  };
+
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex space-x-5 mb-4 items-end">
+    <div className="flex flex-col h-full space-y-4">
+      <div className="flex space-x-5 items-end">
         <EditTickerForm
           ticker={ticker}
           setTicker={setTicker}
@@ -38,7 +47,18 @@ const Ativo = () => {
         />
         <NewOperationForm ticker={ticker} setErrorMessages={setErrorMessages} />
       </div>
-      <TableAtivo notas={notas} />
+      <SelectionTabs
+        selectedTab={notasType}
+        toggleSelected={toggleNotasType}
+        tabs={[
+          { label: "Notas importadas", value: "importadas" },
+          { label: "Notas personalizadas", value: "personalizadas" },
+        ]}
+      />
+      {notasType === "importadas" && <TableAtivo notas={notas} />}
+      {notasType === "personalizadas" && (
+        <TableAtivoPersonalizado notas={notas} />
+      )}
       <ErrorMessagePopUp
         errorMessages={errorMessages}
         setErrorMessages={setErrorMessages}
