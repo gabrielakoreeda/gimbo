@@ -3,11 +3,17 @@ import PageTitle from "@components/ui/PageTitle";
 import NotasContext from "@store/notas-context";
 import Link from "next/link";
 import { NextPage } from "next";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 const Configuracoes: NextPage = () => {
   const notasCtx = useContext(NotasContext);
-  const [key, setKey] = useState(notasCtx.apiKey);
+  const apiKey = notasCtx.apiKey;
+  const [key, setKey] = useState("");
+  const [edit, setEdit] = useState(false);
+
+  useEffect(() => {
+    setKey(apiKey);
+  }, [apiKey]);
 
   const resetNotasHandler = () => {
     notasCtx.reloadNotas("reset");
@@ -23,6 +29,7 @@ const Configuracoes: NextPage = () => {
 
   const saveMarketstackAPIKeyHandler = () => {
     notasCtx.saveAPIKey(key);
+    setEdit(false);
   };
 
   return (
@@ -73,8 +80,12 @@ const Configuracoes: NextPage = () => {
               className="w-1/2"
               value={key}
               onChange={(e) => setKey(e.target.value)}
+              disabled={!edit}
             />
-            <Button onClick={saveMarketstackAPIKeyHandler}>Adicionar</Button>
+            {edit && (
+              <Button onClick={saveMarketstackAPIKeyHandler}>Salvar</Button>
+            )}
+            {!edit && <Button onClick={() => setEdit(true)}>Editar</Button>}
           </div>
         </div>
       </div>
