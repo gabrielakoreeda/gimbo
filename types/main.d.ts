@@ -1,6 +1,12 @@
+interface Ticker {
+  id: number;
+  name: string;
+  symbol: string;
+}
+
 interface Nota {
   id: number;
-  ticker: string;
+  tickerId: number;
   tipo: string;
   descricao?: string;
   manual: boolean;
