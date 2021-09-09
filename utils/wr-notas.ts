@@ -75,11 +75,7 @@ const addNewNota = (
     manual: true,
   };
   notas.push(newOperation);
-  fs.writeFileSync(filename, JSON.stringify(notas), function (err) {
-    if (err) {
-      return console.log(err);
-    }
-  });
+  writeFile(JSON.stringify(notas), filename);
   return newOperation;
 };
 

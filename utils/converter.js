@@ -1,6 +1,6 @@
 let fs = require("fs");
 let PDFJS = require("pdfjs-dist/legacy/build/pdf.js");
-import { readNotas } from "@utils/wr-notas";
+import { readNotas, writeFile } from "@utils/wr-notas";
 
 const folder = "./notas/";
 
@@ -182,15 +182,7 @@ const convertAllPDFs = async (readNewOnly) => {
         });
       notas.push(...manualNotas);
     }
-    fs.writeFileSync(
-      `${folder}/notas.json`,
-      JSON.stringify(notas),
-      function (err) {
-        if (err) {
-          return console.log(err);
-        }
-      }
-    );
+    writeFile(JSON.stringify(notas), "notas.json");
   });
 };
 
