@@ -1,11 +1,11 @@
 import { getTicker } from "adapters/stock-api";
-import { readNotas } from "./wr-notas";
+import { readNotas, readTickers, writeFile } from "./wr-notas";
 let fs = require("fs");
 const folder = "./notas/";
 
 const syncTickers = async () => {
   const notas = readNotas();
-  const tickers = {};
+  const tickers = readTickers();
 
   const getTickers = async (notas, tickers) => {
     return Promise.all(
@@ -21,15 +21,8 @@ const syncTickers = async () => {
     );
   };
   getTickers(notas, tickers).then(() => {
-    fs.writeFileSync(
-      `${folder}/notas.json`,
-      JSON.stringify(notas),
-      function (err) {
-        if (err) {
-          return console.log(err);
-        }
-      }
-    );
+    writeFile(JSON.stringify(notas), "notas.json");
+    writeFile(JSON.stringify(tickers), "tickers.json");
   });
 };
 
