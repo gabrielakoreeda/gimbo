@@ -5,11 +5,9 @@ import { readFile } from "@utils/wr-notas";
 const folder = "./notas/";
 
 const formatField = (operation, fieldName, str) => {
-  operation[fieldName] = (
-    operation[fieldName]
-      ? operation[fieldName] + str
-      : str.replace(/\s{1,}/g, " ")
-  ).trim();
+  operation[fieldName] = operation[fieldName]
+    ? operation[fieldName] + str
+    : str.replace(/\s{1,}/g, " ");
   return operation;
 };
 
@@ -143,7 +141,18 @@ const formatNotas = (notas) => {
       tipo = "FII";
       ticker = nota["Especificação do título"].match(/[A-Za-z]{4}11/g)[0];
     }
-    formattedNotas.push({ id: counter, ticker, tipo, ...nota });
+    nota["Negociação"] = nota["Negociação"].trim();
+    nota["C/V"] = nota["C/V"].trim();
+    nota["Tipo mercado"] = nota["Tipo mercado"].trim();
+    nota["Especificação do título"] = nota["Especificação do título"].trim();
+    nota["Corretora"] = nota["Corretora"].trim();
+    nota["Data pregão"] = nota["Data pregão"].trim();
+    formattedNotas.push({
+      id: counter,
+      ticker,
+      tipo,
+      ...nota,
+    });
     counter++;
   });
   return formattedNotas;
