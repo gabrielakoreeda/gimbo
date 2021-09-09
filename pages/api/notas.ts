@@ -1,7 +1,7 @@
 import convertAllPDFs from "@utils/converter";
 import {
   editTicker,
-  readFile,
+  readNotas,
   addNewNota,
   deleteManualNotas,
 } from "@utils/wr-notas";
@@ -17,7 +17,7 @@ export default function handler(req, res) {
       deleteManualNotas();
     }
     try {
-      const notas = readFile();
+      const notas = readNotas();
       res.status(200).json(notas);
     } catch (err) {
       console.log(err);

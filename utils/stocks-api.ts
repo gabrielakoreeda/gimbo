@@ -1,10 +1,10 @@
 import { getTicker } from "adapters/stock-api";
-import { readFile } from "./wr-notas";
+import { readNotas } from "./wr-notas";
 let fs = require("fs");
 const folder = "./notas/";
 
 const syncTickers = async () => {
-  const notas = readFile();
+  const notas = readNotas();
   const tickers = {};
 
   const getTickers = async (notas, tickers) => {

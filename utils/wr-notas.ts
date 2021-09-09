@@ -3,7 +3,7 @@ const folder = "./notas/";
 const filename = `${folder}/notas.json`;
 
 const editTicker = (ticker, newTicker, type) => {
-  const notas = readFile();
+  const notas = readNotas();
   const updatedNotas = notas.map((nota) => {
     const updatedNota = { ...nota };
     if (newTicker && nota.ticker === ticker) {
@@ -22,9 +22,13 @@ const editTicker = (ticker, newTicker, type) => {
   });
 };
 
-const readFile = (file: string = "notas"): Nota[] => {
-  const notas = JSON.parse(fs.readFileSync(`${folder}/${file}.json`, "utf8"));
-  return notas;
+const readNotas = (): Nota[] => {
+  try {
+    const notas = JSON.parse(fs.readFileSync(`${folder}/notas.json`, "utf8"));
+    return notas;
+  } catch (e) {
+    return [];
+  }
 };
 
 const addNewNota = (
@@ -38,7 +42,7 @@ const addNewNota = (
   description: string,
   corretora: string
 ) => {
-  const notas = readFile();
+  const notas = readNotas();
   const lastId = notas[notas.length - 1]?.id + 1 || 1;
   const [year, month, day] = date.split("-");
   const formattedDate = `${day}/${month}/${year}`;
@@ -65,7 +69,7 @@ const addNewNota = (
 };
 
 const deleteManualNotas = () => {
-  const notas = readFile();
+  const notas = readNotas();
   const newNotas = notas.filter((nota) => nota.manual === false);
   fs.writeFileSync(filename, JSON.stringify(newNotas), function (err) {
     if (err) {
@@ -75,4 +79,4 @@ const deleteManualNotas = () => {
   return newNotas;
 };
 
-export { editTicker, readFile, addNewNota, deleteManualNotas };
+export { editTicker, readNotas, addNewNota, deleteManualNotas };
