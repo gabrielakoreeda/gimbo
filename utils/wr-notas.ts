@@ -31,6 +31,17 @@ const readNotas = (): Nota[] => {
   }
 };
 
+const readTickers = (): {} => {
+  try {
+    const tickers = JSON.parse(
+      fs.readFileSync(`${folder}/tickers.json`, "utf8")
+    );
+    return tickers;
+  } catch (e) {
+    return {};
+  }
+};
+
 const addNewNota = (
   ticker: string,
   operationType: string,
@@ -79,4 +90,4 @@ const deleteManualNotas = () => {
   return newNotas;
 };
 
-export { editTicker, readNotas, addNewNota, deleteManualNotas };
+export { editTicker, readNotas, readTickers, addNewNota, deleteManualNotas };
