@@ -1,6 +1,6 @@
 let fs = require("fs");
 const folder = "./notas/";
-const filename = `${folder}/notas.json`;
+const filename = `notas.json`;
 
 const editTicker = (ticker, newTicker, type) => {
   const notas = readNotas();
@@ -15,11 +15,7 @@ const editTicker = (ticker, newTicker, type) => {
     return updatedNota;
   });
 
-  fs.writeFileSync(filename, JSON.stringify(updatedNotas), function (err) {
-    if (err) {
-      return console.log(err);
-    }
-  });
+  writeFile(JSON.stringify(updatedNotas), filename);
 };
 
 const readNotas = (): Nota[] => {
@@ -40,6 +36,14 @@ const readTickers = (): {} => {
   } catch (e) {
     return {};
   }
+};
+
+const writeFile = (object: string, filename: string) => {
+  fs.writeFileSync(`${folder}/${filename}`, object, function (err) {
+    if (err) {
+      return console.log(err);
+    }
+  });
 };
 
 const addNewNota = (
@@ -82,12 +86,15 @@ const addNewNota = (
 const deleteManualNotas = () => {
   const notas = readNotas();
   const newNotas = notas.filter((nota) => nota.manual === false);
-  fs.writeFileSync(filename, JSON.stringify(newNotas), function (err) {
-    if (err) {
-      return console.log(err);
-    }
-  });
+  writeFile(JSON.stringify(newNotas), filename);
   return newNotas;
 };
 
-export { editTicker, readNotas, readTickers, addNewNota, deleteManualNotas };
+export {
+  editTicker,
+  readNotas,
+  readTickers,
+  addNewNota,
+  deleteManualNotas,
+  writeFile,
+};
