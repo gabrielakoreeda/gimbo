@@ -1,5 +1,6 @@
 import { getKey } from "@utils/config";
 import axios from "axios";
+import axiosThrottle from "axios-request-throttle";
 
 const instance = axios.create({
   baseURL: "http://api.marketstack.com/v1",
@@ -13,6 +14,8 @@ instance.interceptors.request.use((config) => {
   };
   return config;
 });
+
+axiosThrottle.use(instance, { requestsPerSecond: 5 });
 
 const getTicker = (search: string) => {
   return instance
