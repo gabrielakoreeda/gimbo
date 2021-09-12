@@ -32,6 +32,10 @@ const Configuracoes: NextPage = () => {
     setEdit(false);
   };
 
+  const syncTickersHandler = () => {
+    notasCtx.syncTickers();
+  };
+
   return (
     <>
       <PageTitle title="Configurações" />
@@ -74,7 +78,7 @@ const Configuracoes: NextPage = () => {
               <a className="text-green-600">https://marketstack.com/signup</a>
             </Link>
           </p>
-          <div className="flex mt-2">
+          <div className="flex mt-2 mb-4">
             <input
               type="text"
               className="w-1/2"
@@ -87,6 +91,7 @@ const Configuracoes: NextPage = () => {
             )}
             {!edit && <Button onClick={() => setEdit(true)}>Editar</Button>}
           </div>
+          <Button onClick={syncTickersHandler}>Sincronizar informações</Button>
         </div>
       </div>
     </>
