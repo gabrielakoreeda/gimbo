@@ -2,7 +2,7 @@ import { groupBy } from "@utils/query-notas";
 import { useRouter } from "next/dist/client/router";
 import { useEffect, createContext, useCallback, useState } from "react";
 
-const endpoint = "http://localhost:3000/api/notas?";
+const endpoint = "http://localhost:3000/api/";
 
 interface NotasContextType {
   notas: Nota[];
@@ -11,6 +11,7 @@ interface NotasContextType {
   isLoading: boolean;
   apiKey: string;
   saveAPIKey: (key: string) => void;
+  syncTickers: () => void;
   reloadNotas: (reload: string) => void;
   filter: (start: string, end: string) => void;
   getTicker: (ticker: string) => void;
@@ -34,6 +35,7 @@ const NotasContext = createContext<NotasContextType>({
   isLoading: false,
   apiKey: "",
   saveAPIKey: () => {},
+  syncTickers: () => {},
   reloadNotas: () => {},
   filter: () => {},
   getTicker: () => [],
@@ -77,7 +79,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
       if (param) {
         params.append(param, "true");
       }
-      const response = await fetch(endpoint + params.toString());
+      const response = await fetch(endpoint + "notas?" + params.toString());
       response.json().then((data) => {
         setNotas(data);
       });
@@ -99,7 +101,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   const editTicker = (ticker, newTicker, type) => {
     setIsLoading(true);
     const payload = { ticker, newTicker, type };
-    fetch(endpoint, {
+    fetch(endpoint + "notas", {
       method: "PUT",
       body: JSON.stringify(payload),
     }).then(() => {
@@ -111,12 +113,20 @@ export const NotasContextProvider: React.FC = ({ children }) => {
 
   const addNewOperation = (operation) => {
     setIsLoading(true);
-    fetch(endpoint, {
+    fetch(endpoint + "notas", {
       method: "POST",
       body: JSON.stringify(operation),
     }).then(async (response) => {
       const newOperation = await response.json();
       setNotas((prev) => [...prev, newOperation]);
+    });
+    setIsLoading(false);
+  };
+
+  const syncTickers = () => {
+    setIsLoading(true);
+    fetch(endpoint + "tickers").then(async () => {
+      retrieveNotasFile();
     });
     setIsLoading(false);
   };
@@ -137,6 +147,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
     currentTicker: currentTicker,
     isLoading: isLoading,
     saveAPIKey: saveAPIKey,
+    syncTickers: syncTickers,
     apiKey: apiKey,
     reloadNotas: retrieveNotasFile,
     filter: filterHandler,
