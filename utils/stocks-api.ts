@@ -1,29 +1,22 @@
 import { getTicker } from "adapters/stock-api";
 import { readNotas, readTickers, writeFile } from "./wr-notas";
-let fs = require("fs");
-const folder = "./notas/";
 
 const syncTickers = async () => {
   const notas = readNotas();
   const tickers = readTickers();
 
-  const getTickers = async (notas, tickers) => {
-    return Promise.all(
-      notas.map(async (nota, index) => {
-        if (tickers[nota["Especificação do título"]]) {
-          notas[index].ticker = tickers[nota["Especificação do título"]].ticker;
-        } else {
-          const ticker = await getTicker(nota["Especificação do título"]);
-          notas[index].ticker = ticker;
-          tickers[nota["Especificação do título"]] = ticker;
-        }
-      })
-    );
-  };
-  getTickers(notas, tickers).then(() => {
-    writeFile(JSON.stringify(notas), "notas.json");
-    writeFile(JSON.stringify(tickers), "tickers.json");
-  });
+  for (var index = 0; index < notas.length; index++) {
+    if (tickers[notas[index]["Especificação do título"]]) {
+      notas[index].ticker = tickers[notas[index]["Especificação do título"]];
+    } else {
+      const ticker = await getTicker(notas[index]["Especificação do título"]);
+      notas[index].ticker = ticker || notas[index].ticker;
+      tickers[notas[index]["Especificação do título"]] = ticker;
+    }
+  }
+
+  writeFile(JSON.stringify(notas), "notas.json");
+  writeFile(JSON.stringify(tickers), "tickers.json");
 };
 
 export { syncTickers };
