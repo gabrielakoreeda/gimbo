@@ -29,12 +29,6 @@ const Ativo = () => {
     notaCtx.editTicker(id?.toString(), ticker !== id ? ticker : null, type);
   };
 
-  const toggleNotasType = () => {
-    setNotasType((prev) =>
-      prev === "importadas" ? "personalizadas" : "importadas"
-    );
-  };
-
   return (
     <div className="flex flex-col h-full space-y-4">
       <div className="flex space-x-5 items-end">
@@ -49,7 +43,7 @@ const Ativo = () => {
       </div>
       <SelectionTabs
         selectedTab={notasType}
-        toggleSelected={toggleNotasType}
+        setSelectedTab={setNotasType}
         tabs={[
           { label: "Notas importadas", value: "importadas" },
           { label: "Notas personalizadas", value: "personalizadas" },

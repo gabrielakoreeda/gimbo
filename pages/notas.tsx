@@ -63,12 +63,6 @@ const Notas: NextPage = () => {
     setIsLoading(false);
   };
 
-  const toggleNotasType = () => {
-    setNotasType((prev) =>
-      prev === "importadas" ? "personalizadas" : "importadas"
-    );
-  };
-
   const downloadTableHandler = () => {
     const replacer = (key, value) => (value === null ? "" : value);
     const header = Object.keys(notas[0]);
@@ -106,7 +100,7 @@ const Notas: NextPage = () => {
       </div>
       <SelectionTabs
         selectedTab={notasType}
-        toggleSelected={toggleNotasType}
+        setSelectedTab={setNotasType}
         tabs={[
           { label: "Notas importadas", value: "importadas" },
           { label: "Notas personalizadas", value: "personalizadas" },
