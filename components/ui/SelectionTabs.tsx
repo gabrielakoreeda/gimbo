@@ -1,8 +1,14 @@
+import { Dispatch, SetStateAction } from "react";
+
 const SelectionTabs: React.FC<{
   tabs: Array<{ label: string; value: string }>;
   selectedTab: string;
-  toggleSelected: () => void;
-}> = ({ tabs, selectedTab, toggleSelected }) => {
+  setSelectedTab: Dispatch<SetStateAction<string>>;
+}> = ({ tabs, selectedTab, setSelectedTab }) => {
+  const toggleSelected = (tab) => {
+    setSelectedTab(tab);
+  };
+
   return (
     <div className="flex">
       {tabs.map((tab) => {
@@ -14,7 +20,7 @@ const SelectionTabs: React.FC<{
                 ? "border-green-600 text-green-600"
                 : "border-gray-300 cursor-pointer"
             }`}
-            onClick={toggleSelected}
+            onClick={() => toggleSelected(tab.value)}
           >
             {tab.label}
           </p>
