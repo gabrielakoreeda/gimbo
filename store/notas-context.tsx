@@ -11,7 +11,6 @@ interface NotasContextType {
   isLoading: boolean;
   apiKey: string;
   saveAPIKey: (key: string) => void;
-  syncTickers: () => void;
   reloadNotas: (reload: string) => void;
   filter: (start: string, end: string) => void;
   getTicker: (ticker: string) => void;
@@ -35,7 +34,6 @@ const NotasContext = createContext<NotasContextType>({
   isLoading: false,
   apiKey: "",
   saveAPIKey: () => {},
-  syncTickers: () => {},
   reloadNotas: () => {},
   filter: () => {},
   getTicker: () => [],
@@ -123,14 +121,6 @@ export const NotasContextProvider: React.FC = ({ children }) => {
     setIsLoading(false);
   };
 
-  const syncTickers = () => {
-    setIsLoading(true);
-    fetch(endpoint + "tickers").then(async () => {
-      retrieveNotasFile();
-    });
-    setIsLoading(false);
-  };
-
   useEffect(() => {
     retrieveNotasFile();
     getKey();
@@ -147,7 +137,6 @@ export const NotasContextProvider: React.FC = ({ children }) => {
     currentTicker: currentTicker,
     isLoading: isLoading,
     saveAPIKey: saveAPIKey,
-    syncTickers: syncTickers,
     apiKey: apiKey,
     reloadNotas: retrieveNotasFile,
     filter: filterHandler,

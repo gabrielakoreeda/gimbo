@@ -32,10 +32,6 @@ const Configuracoes: NextPage = () => {
     setEdit(false);
   };
 
-  const syncTickersHandler = () => {
-    notasCtx.syncTickers();
-  };
-
   return (
     <>
       <PageTitle title="Configurações" />
@@ -91,7 +87,6 @@ const Configuracoes: NextPage = () => {
             )}
             {!edit && <Button onClick={() => setEdit(true)}>Editar</Button>}
           </div>
-          <Button onClick={syncTickersHandler}>Sincronizar informações</Button>
         </div>
       </div>
     </>
