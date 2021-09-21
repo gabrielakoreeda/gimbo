@@ -69,7 +69,8 @@ const Configuracoes: NextPage = () => {
         <div>
           <p className="text-gray-600">
             A API é utilizada para buscar informações adicionais sobre cada
-            ativo. A chave pode ser gerada em: {}
+            ativo. A API tem um limite diário de 500 chamadas, além de 5
+            chamadas por minuto. A chave pode ser gerada em: {}
             <Link href="https://www.alphavantage.co/">
               <a className="text-green-600">https://www.alphavantage.co/</a>
             </Link>
