@@ -63,7 +63,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   const getKey = useCallback(async () => {
     const response = await fetch("http://localhost:3000/api/config");
     const data = await response.json();
-    setApiKey(data.MARKETSTACK_KEY);
+    setApiKey(data.ALPHAVANTAGE_KEY);
   }, []);
 
   const filterHandler = (start, end) => {

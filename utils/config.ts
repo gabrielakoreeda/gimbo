@@ -1,7 +1,7 @@
 let fs = require("fs");
 
 const saveKey = (key: string) => {
-  fs.writeFileSync(`./.env`, `MARKETSTACK_KEY=${key}`, function (err) {
+  fs.writeFileSync(`./.env`, `ALPHAVANTAGE_KEY=${key}`, function (err) {
     if (err) {
       return console.log(err);
     }

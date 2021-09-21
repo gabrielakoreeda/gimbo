@@ -27,7 +27,7 @@ const Configuracoes: NextPage = () => {
     notasCtx.reloadNotas("remove");
   };
 
-  const saveMarketstackAPIKeyHandler = () => {
+  const saveAPIKeyHandler = () => {
     notasCtx.saveAPIKey(key);
     setEdit(false);
   };
@@ -64,14 +64,14 @@ const Configuracoes: NextPage = () => {
           <Button onClick={removeManualHandler}>Aplicar</Button>
         </div>
         <h2 className="font-bold text-gray-600 text-md">
-          Adicionar chave API Marketstack
+          Adicionar chave API Alpha Vantage
         </h2>
         <div>
           <p className="text-gray-600">
             A API é utilizada para buscar informações adicionais sobre cada
             ativo. A chave pode ser gerada em: {}
-            <Link href="https://marketstack.com/signup">
-              <a className="text-green-600">https://marketstack.com/signup</a>
+            <Link href="https://www.alphavantage.co/">
+              <a className="text-green-600">https://www.alphavantage.co/</a>
             </Link>
           </p>
           <div className="flex mt-2 mb-4">
@@ -82,9 +82,7 @@ const Configuracoes: NextPage = () => {
               onChange={(e) => setKey(e.target.value)}
               disabled={!edit}
             />
-            {edit && (
-              <Button onClick={saveMarketstackAPIKeyHandler}>Salvar</Button>
-            )}
+            {edit && <Button onClick={saveAPIKeyHandler}>Salvar</Button>}
             {!edit && <Button onClick={() => setEdit(true)}>Editar</Button>}
           </div>
         </div>
