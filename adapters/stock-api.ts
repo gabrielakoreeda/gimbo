@@ -3,35 +3,29 @@ import axios from "axios";
 import axiosThrottle from "axios-request-throttle";
 
 const instance = axios.create({
-  baseURL: "http://api.marketstack.com/v1",
+  baseURL: "https://www.alphavantage.co/query",
 });
 
 instance.interceptors.request.use((config) => {
   config.params = {
-    access_key: getKey()["MARKETSTACK_KEY"],
-    exchange: "BVMF",
+    apikey: getKey()["ALPHAVANTAGE_KEY"],
     ...config.params,
   };
   return config;
 });
 
-axiosThrottle.use(instance, { requestsPerSecond: 5 });
+axiosThrottle.use(instance, { requestsPerSecond: 0.08 });
 
 const getTicker = (search: string) => {
   return instance
-    .get("/tickers", {
+    .get("", {
       params: {
-        search,
+        function: "SYMBOL_SEARCH",
+        keywords: search,
       },
     })
     .then((response) => {
-      let ticker;
-      response.data.data.forEach((item) => {
-        if (item.name === search) {
-          ticker = item.symbol.replace("F.BVMF", ".BVMF");
-        }
-      });
-      return ticker;
+      return response.data.bestMatches;
     });
 };
 
