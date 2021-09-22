@@ -4,7 +4,6 @@ import TableAtivo from "@components/table/TableAtivo";
 import NewOperationForm from "@components/forms/NewOperationForm";
 import NotasContext from "@store/notas-context";
 import ErrorMessagePopUp from "@components/ui/ErrorMessagePopUp";
-import EditTickerForm from "@components/forms/EditTickerForm";
 import SelectionTabs from "@components/ui/SelectionTabs";
 import TableAtivoPersonalizado from "@components/table/TableAtivoPersonalizado";
 
@@ -30,15 +29,8 @@ const Ativo = () => {
   };
 
   return (
-    <div className="flex flex-col h-full space-y-4">
+    <div className="flex flex-col h-full space-y-4 overflow-hidden">
       <div className="flex space-x-5 items-end">
-        <EditTickerForm
-          ticker={ticker}
-          setTicker={setTicker}
-          type={type}
-          setType={setType}
-          saveTicker={changeTickerHandler}
-        />
         <NewOperationForm ticker={ticker} setErrorMessages={setErrorMessages} />
       </div>
       <SelectionTabs
