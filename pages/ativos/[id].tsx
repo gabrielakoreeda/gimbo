@@ -30,6 +30,7 @@ const Ativo = () => {
 
   return (
     <div className="flex flex-col h-full space-y-4 overflow-hidden">
+      <h1 className="font-bold text-lg">{ticker}</h1>
       <div className="flex space-x-5 items-end">
         <NewOperationForm ticker={ticker} setErrorMessages={setErrorMessages} />
       </div>
