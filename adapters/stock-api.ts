@@ -16,17 +16,14 @@ instance.interceptors.request.use((config) => {
 
 axiosThrottle.use(instance, { requestsPerSecond: 0.08 });
 
-const getTicker = (search: string) => {
+const getInfo = (params) => {
   return instance
     .get("", {
-      params: {
-        function: "SYMBOL_SEARCH",
-        keywords: search,
-      },
+      params,
     })
     .then((response) => {
       return response.data.bestMatches;
     });
 };
 
-export { getTicker };
+export { getInfo };
