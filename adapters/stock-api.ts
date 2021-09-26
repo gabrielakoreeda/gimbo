@@ -22,7 +22,7 @@ const getInfo = (params) => {
       params,
     })
     .then((response) => {
-      return response.data.bestMatches;
+      return response.data;
     });
 };
 
