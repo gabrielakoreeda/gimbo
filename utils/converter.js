@@ -131,15 +131,68 @@ const convertPDFToObject = async (filename, notas) => {
   }
 };
 
+function similarity(s1, s2) {
+  var longer = s1;
+  var shorter = s2;
+  if (s1.length < s2.length) {
+    longer = s2;
+    shorter = s1;
+  }
+  var longerLength = longer.length;
+  if (longerLength == 0) {
+    return 1.0;
+  }
+  return (
+    (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength)
+  );
+}
+
+function editDistance(s1, s2) {
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
+
+  var costs = new Array();
+  for (var i = 0; i <= s1.length; i++) {
+    var lastValue = i;
+    for (var j = 0; j <= s2.length; j++) {
+      if (i == 0) costs[j] = j;
+      else {
+        if (j > 0) {
+          var newValue = costs[j - 1];
+          if (s1.charAt(i - 1) != s2.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
+        }
+      }
+    }
+    if (i > 0) costs[s2.length] = lastValue;
+  }
+  return costs[s2.length];
+}
+
 const formatNotas = (notas) => {
   let formattedNotas = [];
   let counter = 1;
+  const slugs = [];
   notas.forEach((nota) => {
-    let ticker = nota["Especificação do título"].replace(/\s+/g, "");
+    const slugExists = slugs.find(
+      (slug) =>
+        similarity(
+          slug.replace(/\s+/g, ""),
+          nota["Especificação do título"].replace(/\s+/g, "")
+        ) >= 0.75
+    );
+    let slug = nota["Especificação do título"].replace(/\s+/g, "");
+    if (slugExists) {
+      slug = slugExists;
+    } else {
+      slugs.push(slug);
+    }
+    let ticker = "";
     let tipo = "Ação";
     if (nota["Especificação do título"].startsWith("FII")) {
       tipo = "FII";
-      ticker = nota["Especificação do título"].match(/[A-Za-z]{4}11/g)[0];
     }
     nota["Negociação"] = nota["Negociação"].trim();
     nota["C/V"] = nota["C/V"].trim();
@@ -149,6 +202,7 @@ const formatNotas = (notas) => {
     nota["Data pregão"] = nota["Data pregão"].trim();
     formattedNotas.push({
       id: counter,
+      slug,
       ticker,
       tipo,
       ...nota,
