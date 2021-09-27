@@ -80,7 +80,7 @@ const StockDataInfo: React.FC = () => {
           </span>
           <div className="overflow-scroll h-5/6">
             {!noResults && !isLoading && searchResults.length === 0 && (
-              <FaSearchDollar className="m-auto my-5 text-7xl text-gray-600 h-full" />
+              <FaSearchDollar className="m-auto my-5 text-7xl text-gray-600" />
             )}
             {searchResults.map((res, index) => {
               return (
@@ -105,7 +105,7 @@ const StockDataInfo: React.FC = () => {
               </p>
             )}
             {isLoading && (
-              <VscLoading className="animate-spin m-auto my-5 text-7xl text-gray-600 h-full" />
+              <VscLoading className="animate-spin m-auto my-5 text-7xl text-gray-600" />
             )}
           </div>
         </>
@@ -131,7 +131,7 @@ const StockDataInfo: React.FC = () => {
                 </>
               )}
             {isLoading && (
-              <VscLoading className="animate-spin m-auto my-5 text-7xl text-gray-600 h-full" />
+              <VscLoading className="animate-spin m-auto my-5 text-7xl text-gray-600" />
             )}
           </div>
         </>
