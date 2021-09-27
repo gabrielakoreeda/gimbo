@@ -87,9 +87,9 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   );
 
   const getTicker = useCallback(
-    (ticker) => {
+    (slug) => {
       setIsLoading(true);
-      const filteredNotas = notas.filter((nota) => nota.ticker === ticker);
+      const filteredNotas = notas.filter((nota) => nota.slug === slug);
       setCurrentTicker(filteredNotas);
       setIsLoading(false);
     },
