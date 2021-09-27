@@ -48,8 +48,8 @@ const groupBy = (notas) => {
   const groupNotas = {};
   const groupedNotas = [];
   notas.forEach((nota) => {
-    if (Object.keys(groupNotas).includes(nota.ticker)) {
-      const currNota = groupNotas[nota.ticker];
+    if (Object.keys(groupNotas).includes(nota.slug)) {
+      const currNota = groupNotas[nota.slug];
       const calcValues = {
         totalCompra: round(
           nota["C/V"] === "C"
@@ -90,12 +90,13 @@ const groupBy = (notas) => {
           -2
         ),
       };
-      groupedNotas[groupNotas[nota.ticker].index] = {
-        ticker: nota.ticker,
+      groupedNotas[groupNotas[nota.slug].index] = {
+        titulo: nota["Especificação do título"],
+        slug: nota.slug,
         ...calcValues,
       };
-      groupNotas[nota.ticker] = {
-        ...groupNotas[nota.ticker],
+      groupNotas[nota.slug] = {
+        ...groupNotas[nota.slug],
         ...calcValues,
       };
     } else {
@@ -123,12 +124,13 @@ const groupBy = (notas) => {
           -2
         ),
       };
-      groupNotas[nota.ticker] = {
+      groupNotas[nota.slug] = {
         index: groupedNotas.length,
         ...calcValues,
       };
       groupedNotas.push({
-        ticker: nota.ticker,
+        titulo: nota["Especificação do título"],
+        slug: nota.slug,
         ...calcValues,
       });
     }
