@@ -1,7 +1,6 @@
 import { formatMoney } from "../../utils/index";
 import Link from "next/link";
 import TableWrapper from "./TableWrapper";
-import Button from "../ui/Button";
 
 const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
   return (
@@ -18,10 +17,10 @@ const TablePosicoes: React.FC<{ notas: NotaConsolidada[] }> = (props) => {
           {props.notas?.map((nota) => {
             if (nota.qtdCompra - nota.qtdVenda > 0) {
               return (
-                <tr key={nota.ticker}>
+                <tr key={nota.slug}>
                   <td className="text-green-500">
-                    <Link href={`/ativos/${nota.ticker}`}>
-                      <a>{nota.ticker}</a>
+                    <Link href={`/ativos/${nota.slug}`}>
+                      <a>{nota.titulo?.substring(0, 10)}...</a>
                     </Link>
                   </td>
                   <td>{formatMoney(nota.precoMedioCompra)}</td>

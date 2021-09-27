@@ -23,10 +23,10 @@ const TablePosicoesFechadas: React.FC<{ notas: NotaConsolidada[] }> = (
           {props.notas?.map((nota) => {
             if (nota.qtdCompra - nota.qtdVenda === 0) {
               return (
-                <tr key={nota.ticker}>
+                <tr key={nota.slug}>
                   <td className="text-green-500">
-                    <Link href={`/ativos/${nota.ticker}`}>
-                      <a>{nota.ticker}</a>
+                    <Link href={`/ativos/${nota.slug}`}>
+                      <a>{nota.titulo?.substring(0, 10)}...</a>
                     </Link>
                   </td>
                   <td>{nota.qtdCompra}</td>
