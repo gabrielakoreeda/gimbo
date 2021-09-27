@@ -1,6 +1,7 @@
 interface Nota {
   id: number;
   ticker: string;
+  slug: string;
   tipo: string;
   descricao?: string;
   manual: boolean;
@@ -18,7 +19,9 @@ interface Nota {
 }
 
 interface NotaConsolidada {
-  ticker: string;
+  titulo: string;
+  ticker?: string;
+  slug: string;
   totalCompra: number | null;
   totalVenda: number | null;
   qtdCompra: number | null;
