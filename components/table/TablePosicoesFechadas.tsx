@@ -25,7 +25,7 @@ const TablePosicoesFechadas: React.FC<{ notas: NotaConsolidada[] }> = (
               return (
                 <tr key={nota.slug}>
                   <td className="text-green-500">
-                    <Link href={`/ativos/${nota.slug}`}>
+                    <Link href={`/posicoes/${nota.slug}`}>
                       <a>{nota.titulo?.substring(0, 10)}...</a>
                     </Link>
                   </td>
