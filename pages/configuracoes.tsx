@@ -1,13 +1,15 @@
 import Button from "@components/ui/Button";
 import PageTitle from "@components/ui/PageTitle";
 import NotasContext from "@store/notas-context";
+import StockContext from "@store/stock-context";
 import Link from "next/link";
 import { NextPage } from "next";
 import { useContext, useEffect, useState } from "react";
 
 const Configuracoes: NextPage = () => {
   const notasCtx = useContext(NotasContext);
-  const apiKey = notasCtx.apiKey;
+  const stockCtx = useContext(StockContext);
+  const apiKey = stockCtx.apiKey;
   const [key, setKey] = useState("");
   const [edit, setEdit] = useState(false);
 
@@ -28,7 +30,7 @@ const Configuracoes: NextPage = () => {
   };
 
   const saveAPIKeyHandler = () => {
-    notasCtx.saveAPIKey(key);
+    stockCtx.saveAPIKey(key);
     setEdit(false);
   };
 
