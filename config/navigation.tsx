@@ -1,6 +1,7 @@
 import { FaCog, FaCoins } from "react-icons/fa";
 import { IoReceipt } from "react-icons/io5";
 import { MdDashboard } from "react-icons/md";
+import { RiBankFill } from "react-icons/ri";
 
 const navigation = [
   {
@@ -12,6 +13,11 @@ const navigation = [
     path: "/posicoes",
     icon: <FaCoins />,
     label: "Posições",
+  },
+  {
+    path: "/ir",
+    icon: <RiBankFill />,
+    label: "IR",
   },
   {
     path: "/notas",
