@@ -9,8 +9,6 @@ interface NotasContextType {
   notasConsolidadas: NotaConsolidada[];
   currentTicker: Nota[];
   isLoading: boolean;
-  apiKey: string;
-  saveAPIKey: (key: string) => void;
   reloadNotas: (reload: string) => void;
   filter: (start: string, end: string) => void;
   getTicker: (ticker: string) => void;
@@ -32,8 +30,6 @@ const NotasContext = createContext<NotasContextType>({
   notasConsolidadas: [],
   currentTicker: [],
   isLoading: false,
-  apiKey: "",
-  saveAPIKey: () => {},
   reloadNotas: () => {},
   filter: () => {},
   getTicker: () => [],
@@ -49,22 +45,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   const [currentTicker, setCurrentTicker] = useState<Nota[]>([]);
   const [filterPeriod, setFilterPeriod] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState("");
   const router = useRouter();
-
-  const saveAPIKey = (key) => {
-    fetch("http://localhost:3000/api/config", {
-      method: "POST",
-      body: JSON.stringify({ key }),
-    });
-    setApiKey(key);
-  };
-
-  const getKey = useCallback(async () => {
-    const response = await fetch("http://localhost:3000/api/config");
-    const data = await response.json();
-    setApiKey(data.ALPHAVANTAGE_KEY);
-  }, []);
 
   const filterHandler = (start, end) => {
     setFilterPeriod([start, end]);
@@ -123,8 +104,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     retrieveNotasFile();
-    getKey();
-  }, [retrieveNotasFile, getKey]);
+  }, [retrieveNotasFile]);
 
   useEffect(() => {
     const notasConsolidadas = groupBy(notas);
@@ -136,8 +116,6 @@ export const NotasContextProvider: React.FC = ({ children }) => {
     notasConsolidadas: notasConsolidadas,
     currentTicker: currentTicker,
     isLoading: isLoading,
-    saveAPIKey: saveAPIKey,
-    apiKey: apiKey,
     reloadNotas: retrieveNotasFile,
     filter: filterHandler,
     getTicker: getTicker,
