@@ -41,14 +41,14 @@ const Ativo = () => {
         tabs={[
           { label: "Notas importadas", value: "importadas" },
           { label: "Notas personalizadas", value: "personalizadas" },
-          { label: "Alpha Vantage", value: "alphavantage" },
+          { label: "Informações", value: "info" },
         ]}
       />
       {notasType === "importadas" && <TableAtivo notas={notas} />}
       {notasType === "personalizadas" && (
         <TableAtivoPersonalizado notas={notas} />
       )}
-      {notasType === "alphavantage" && <StockDataInfo />}
+      {notasType === "info" && <StockDataInfo />}
       <ErrorMessagePopUp
         errorMessages={errorMessages}
         setErrorMessages={setErrorMessages}
