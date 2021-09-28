@@ -6,7 +6,7 @@ import NotasContext from "@store/notas-context";
 import ErrorMessagePopUp from "@components/ui/ErrorMessagePopUp";
 import SelectionTabs from "@components/ui/SelectionTabs";
 import TableAtivoPersonalizado from "@components/table/TableAtivoPersonalizado";
-import StockDataInfo from "@components/marketdata/StockDataInfo";
+import StockDataInfo from "@components/stockinfo/StockDataInfo";
 
 const Ativo = () => {
   const notaCtx = useContext(NotasContext);
@@ -48,9 +48,7 @@ const Ativo = () => {
       {notasType === "personalizadas" && (
         <TableAtivoPersonalizado notas={notas} />
       )}
-      {notasType === "alphavantage" && (
-        <StockDataInfo/>
-      )}
+      {notasType === "alphavantage" && <StockDataInfo />}
       <ErrorMessagePopUp
         errorMessages={errorMessages}
         setErrorMessages={setErrorMessages}

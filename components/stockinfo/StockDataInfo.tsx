@@ -2,7 +2,7 @@ import Button from "@components/ui/Button";
 import { useState } from "react";
 import { FaSearchDollar } from "react-icons/fa";
 import { VscLoading } from "react-icons/vsc";
-import Candlestick from "@components/marketdata/Candlestick";
+import Candlestick from "@components/stockinfo/Candlestick";
 
 const StockDataInfo: React.FC = () => {
   const [searchText, setSearchText] = useState("");
