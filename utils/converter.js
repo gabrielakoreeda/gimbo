@@ -236,7 +236,23 @@ const convertAllPDFs = async (readNewOnly) => {
         });
       notas.push(...manualNotas);
     }
-    writeFile(JSON.stringify(notas), "notas.json");
+    var sortedNotas = notas.sort(function (a, b) {
+      const [dayA, monthA, yearA] = a["Data pregão"].split("/");
+      const dateA = new Date(
+        parseInt(yearA),
+        parseInt(monthA) - 1,
+        parseInt(dayA)
+      );
+      const [dayB, monthB, yearB] = b["Data pregão"].split("/");
+      const dateB = new Date(
+        parseInt(yearB),
+        parseInt(monthB) - 1,
+        parseInt(dayB)
+      );
+
+      return dateB - dateA;
+    });
+    writeFile(JSON.stringify(sortedNotas), "notas.json");
   });
 };
 
