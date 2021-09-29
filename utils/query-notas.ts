@@ -154,4 +154,97 @@ const groupBy = (notas) => {
   });
 };
 
-export { filterNotas, groupBy };
+const groupByMonth = (notas) => {
+  const groupNotas = {};
+  const groupedNotas = [];
+  const monthly = {};
+  notas.forEach((nota) => {
+    let calcValues;
+    if (Object.keys(groupNotas).includes(nota.slug)) {
+      const currNota = groupNotas[nota.slug];
+      calcValues = {
+        totalCompra:
+          nota["C/V"] === "C"
+            ? nota["Valor Operação / Ajuste"] + currNota.totalCompra
+            : currNota.totalCompra,
+        qtdCompra:
+          nota["C/V"] === "C"
+            ? nota.Quantidade + currNota.qtdCompra
+            : currNota.qtdCompra,
+        precoMedioCompra:
+          nota["C/V"] === "C"
+            ? (nota["Valor Operação / Ajuste"] + currNota.totalCompra) /
+              (nota.Quantidade + currNota.qtdCompra)
+            : currNota.precoMedioCompra,
+      };
+      groupedNotas[groupNotas[nota.slug].index] = {
+        titulo: nota["Especificação do título"],
+        slug: nota.slug,
+        ...calcValues,
+      };
+      groupNotas[nota.slug] = {
+        ...groupNotas[nota.slug],
+        ...calcValues,
+      };
+    } else {
+      calcValues = {
+        totalCompra: nota["C/V"] === "C" ? nota["Valor Operação / Ajuste"] : 0,
+        qtdCompra: nota["C/V"] === "C" ? nota.Quantidade : 0,
+        precoMedioCompra:
+          nota["C/V"] === "C"
+            ? nota["Valor Operação / Ajuste"] / nota.Quantidade
+            : 0,
+      };
+      groupedNotas.push({
+        titulo: nota["Especificação do título"],
+        slug: nota.slug,
+        ...calcValues,
+      });
+      groupNotas[nota.slug] = {
+        index: groupedNotas.length,
+        ...calcValues,
+      };
+    }
+
+    if (nota["C/V"] === "V") {
+      const [day, month, year] = nota["Data pregão"].split("/");
+      if (Object.keys(monthly).includes(year)) {
+        if (Object.keys(monthly[year]).includes(month)) {
+          monthly[year][month] = {
+            ...monthly[year][month],
+            [nota.tipo]:
+              (monthly[year][month][nota.tipo] || 0) +
+              (nota["Preço / Ajuste"] - calcValues.precoMedioCompra) *
+                nota.Quantidade,
+          };
+        } else {
+          monthly[year][month] = {
+            [nota.tipo]:
+              (nota["Preço / Ajuste"] - calcValues.precoMedioCompra) *
+              nota.Quantidade,
+          };
+        }
+      } else {
+        monthly[year] = {
+          [month]: {
+            [nota.tipo]:
+              (nota["Preço / Ajuste"] - calcValues.precoMedioCompra) *
+              nota.Quantidade,
+          },
+        };
+      }
+    }
+  });
+  Object.keys(monthly).forEach((year) => {
+    Object.keys(monthly[year]).forEach((month) => {
+      if (monthly[year][month]["Ação"])
+        monthly[year][month]["Ação"] = round(monthly[year][month]["Ação"], -2);
+      if (monthly[year][month]["FII"])
+        monthly[year][month]["FII"] = round(monthly[year][month]["FII"], -2);
+    });
+  });
+
+  return monthly;
+};
+
+export { filterNotas, groupBy, groupByMonth };
