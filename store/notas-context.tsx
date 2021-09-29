@@ -1,4 +1,4 @@
-import { groupBy } from "@utils/query-notas";
+import { groupBy, groupByMonth } from "@utils/query-notas";
 import { useRouter } from "next/dist/client/router";
 import { useEffect, createContext, useCallback, useState } from "react";
 
@@ -7,6 +7,7 @@ const endpoint = "http://localhost:3000/api/";
 interface NotasContextType {
   notas: Nota[];
   notasConsolidadas: NotaConsolidada[];
+  ir: {};
   currentTicker: Nota[];
   isLoading: boolean;
   reloadNotas: (reload: string) => void;
@@ -28,6 +29,7 @@ interface NotasContextType {
 const NotasContext = createContext<NotasContextType>({
   notas: [],
   notasConsolidadas: [],
+  ir: {},
   currentTicker: [],
   isLoading: false,
   reloadNotas: () => {},
@@ -42,6 +44,7 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   const [notasConsolidadas, setNotasConsolidadas] = useState<NotaConsolidada[]>(
     []
   );
+  const [ir, setIr] = useState({});
   const [currentTicker, setCurrentTicker] = useState<Nota[]>([]);
   const [filterPeriod, setFilterPeriod] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -109,11 +112,13 @@ export const NotasContextProvider: React.FC = ({ children }) => {
   useEffect(() => {
     const notasConsolidadas = groupBy(notas);
     setNotasConsolidadas(notasConsolidadas);
+    setIr(groupByMonth(notas));
   }, [notas]);
 
   const contextValue = {
     notas: notas,
     notasConsolidadas: notasConsolidadas,
+    ir: ir,
     currentTicker: currentTicker,
     isLoading: isLoading,
     reloadNotas: retrieveNotasFile,
