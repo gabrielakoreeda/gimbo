@@ -237,10 +237,16 @@ const groupByMonth = (notas) => {
   });
   Object.keys(monthly).forEach((year) => {
     Object.keys(monthly[year]).forEach((month) => {
-      if (monthly[year][month]["Ação"])
+      if (monthly[year][month]["Ação"]) {
         monthly[year][month]["Ação"] = round(monthly[year][month]["Ação"], -2);
-      if (monthly[year][month]["FII"])
+      } else {
+        monthly[year][month]["Ação"] = 0;
+      }
+      if (monthly[year][month]["FII"]) {
         monthly[year][month]["FII"] = round(monthly[year][month]["FII"], -2);
+      } else {
+        monthly[year][month]["FII"] = 0;
+      }
     });
   });
 
