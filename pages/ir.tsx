@@ -1,20 +1,19 @@
 import NotasContext from "@store/notas-context";
 import { NextPage } from "next";
 import { useContext, useEffect, useState } from "react";
-import { groupByMonth } from "@utils/query-notas";
 import TableIR from "@components/table/TableIR";
 import Button from "@components/ui/Button";
 
 const IR: NextPage = () => {
   const notasCtx = useContext(NotasContext);
-  const notas = notasCtx.notas;
+  const ir = notasCtx.ir;
   const [referenceYear, setReferenceYear] = useState<string>();
   const [notasPorMes, setNotasPorMes] = useState({});
   const [selectedNotas, setSelectedNotas] = useState({});
 
   useEffect(() => {
-    setNotasPorMes(groupByMonth(notas));
-  }, [notas]);
+    setNotasPorMes(ir);
+  }, [ir]);
 
   useEffect(() => {
     const currentYear = new Date().getFullYear();
