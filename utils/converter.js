@@ -250,7 +250,7 @@ const convertAllPDFs = async (readNewOnly) => {
         parseInt(dayB)
       );
 
-      return dateB - dateA;
+      return dateA - dateB;
     });
     writeFile(JSON.stringify(sortedNotas), "notas.json");
   });
