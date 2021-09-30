@@ -1,4 +1,4 @@
-import { getTicker } from "adapters/stock-api";
+import { getInfo } from "adapters/stock-api";
 import { readNotas, readTickers, writeFile } from "./wr-notas";
 
 const syncTickers = async () => {
@@ -9,7 +9,7 @@ const syncTickers = async () => {
     if (tickers[notas[index]["Especificação do título"]]) {
       notas[index].ticker = tickers[notas[index]["Especificação do título"]];
     } else {
-      const ticker = await getTicker(notas[index]["Especificação do título"]);
+      const ticker = await getInfo(notas[index]["Especificação do título"]);
       notas[index].ticker = ticker || notas[index].ticker;
       tickers[notas[index]["Especificação do título"]] = ticker;
     }
