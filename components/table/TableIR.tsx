@@ -14,20 +14,35 @@ const TableIR: React.FC<{ notas: {} }> = ({ notas }) => {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(notas)
-            .sort()
-            .map((month) => {
-              return (
-                <tr key={month}>
-                  <td>{month}</td>
-                  <td>{formatMoney(notas[month]["Ação"])}</td>
-                  <td>{formatMoney(notas[month]["FII"])}</td>
-                  <td>
-                    {formatMoney(notas[month]["Ação"] + notas[month]["FII"])}
-                  </td>
-                </tr>
-              );
-            })}
+          {[
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "10",
+            "11",
+            "12",
+          ].map((month) => {
+            return (
+              <tr key={month}>
+                <td>{month}</td>
+                <td>{formatMoney(notas[month] ? notas[month]["Ação"] : 0)}</td>
+                <td>{formatMoney(notas[month] ? notas[month]["FII"] : 0)}</td>
+                <td>
+                  {formatMoney(
+                    notas[month]
+                      ? notas[month]["Ação"] + notas[month]["FII"]
+                      : 0
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </TableWrapper>
