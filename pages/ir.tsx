@@ -13,12 +13,10 @@ const IR: NextPage = () => {
 
   useEffect(() => {
     setNotasPorMes(ir);
+    const currentYear = new Date().getFullYear().toString();
+    setReferenceYear(currentYear);
+    setSelectedNotas(ir[currentYear]);
   }, [ir]);
-
-  useEffect(() => {
-    const currentYear = new Date().getFullYear();
-    setReferenceYear(currentYear.toString());
-  }, []);
 
   const selectYearHandler = () => {
     setSelectedNotas(notasPorMes[referenceYear]);
@@ -40,7 +38,7 @@ const IR: NextPage = () => {
           />
           <Button onClick={selectYearHandler}>Selecionar</Button>
         </span>
-        <TableIR notas={selectedNotas} />
+        <TableIR notas={selectedNotas || {}} />
       </div>
     </>
   );
