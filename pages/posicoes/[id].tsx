@@ -14,15 +14,14 @@ const Ativo = () => {
   const getTicker = notaCtx.getTicker;
   const router = useRouter();
   const { id } = router.query;
-  const [ticker, setTicker] = useState("");
-  const [type, setType] = useState("");
+  const [slug, setSlug] = useState("");
   const [errorMessages, setErrorMessages] = useState<string[]>([]);
   const [notasType, setNotasType] = useState("importadas");
 
   useEffect(() => {
-    const ativoTicker = id?.toString();
-    setTicker(ativoTicker);
-    getTicker(ativoTicker);
+    const slug = id?.toString();
+    setSlug(slug);
+    getTicker(slug);
   }, [getTicker, id]);
 
   const changeTickerHandler = (ticker, type) => {
@@ -31,9 +30,9 @@ const Ativo = () => {
 
   return (
     <div className="flex flex-col h-full space-y-4 overflow-hidden">
-      <h1 className="font-bold text-lg">{ticker}</h1>
+      <h1 className="font-bold text-lg">{slug}</h1>
       <div className="flex space-x-5 items-end">
-        <NewOperationForm ticker={ticker} setErrorMessages={setErrorMessages} />
+        <NewOperationForm slug={slug} setErrorMessages={setErrorMessages} />
       </div>
       <SelectionTabs
         selectedTab={notasType}

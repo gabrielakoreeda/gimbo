@@ -9,12 +9,13 @@ import {
 } from "react";
 
 const NewOperationForm: React.FC<{
-  ticker: string;
+  slug: string;
   setErrorMessages: Dispatch<SetStateAction<string[]>>;
-}> = ({ ticker, setErrorMessages }) => {
+}> = ({ slug, setErrorMessages }) => {
   const notaCtx = useContext(NotasContext);
   const emptyOperation = {
-    ticker: ticker,
+    slug,
+    ticker: "",
     operationType: "C",
     quantity: 0,
     price: 0,
@@ -24,6 +25,7 @@ const NewOperationForm: React.FC<{
     description: "",
   };
   const [newOperation, setNewOperation] = useState<{
+    slug: string;
     ticker: string;
     operationType: string;
     quantity: number;
@@ -36,9 +38,9 @@ const NewOperationForm: React.FC<{
 
   useEffect(() => {
     setNewOperation((prev) => {
-      return { ...prev, ticker };
+      return { ...prev, slug };
     });
-  }, [ticker]);
+  }, [slug]);
 
   const validateFields = () => {
     const errorMessages = [];

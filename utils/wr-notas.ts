@@ -47,6 +47,7 @@ const writeFile = (object: string, filename: string) => {
 };
 
 const addNewNota = (
+  slug: string,
   ticker: string,
   operationType: string,
   type: string,
@@ -63,6 +64,7 @@ const addNewNota = (
   const formattedDate = `${day}/${month}/${year}`;
   const newOperation = {
     id: lastId,
+    slug,
     ticker,
     tipo: type,
     descricao: description,

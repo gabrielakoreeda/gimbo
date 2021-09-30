@@ -34,6 +34,7 @@ export default function handler(req, res) {
     }
   } else if (req.method === "POST") {
     const {
+      slug,
       ticker,
       operationType,
       type,
@@ -46,6 +47,7 @@ export default function handler(req, res) {
     } = JSON.parse(req.body);
     try {
       const newOperation = addNewNota(
+        slug,
         ticker,
         operationType,
         type,
